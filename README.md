@@ -1,30 +1,106 @@
-# NFT ticket prototype
+# NFT Ticket Marketplace
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+NFT Ticket Marketplace is a modern web application that allows users to purchase, manage, and transfer event tickets as NFTs (Non-Fungible Tokens). The platform ensures secure, authentic, and easily transferable tickets for a variety of events, leveraging blockchain wallet integration for seamless user experience.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/dxmaptins-projects/v0-nft-ticket-prototype)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/6zlNqLskafA)
+## Features
 
-## Overview
+- Browse and purchase tickets for various events as NFTs
+- Secure wallet connection and management
+- Dashboard for users to view and manage their tickets
+- Responsive, modern UI with dark mode support
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+## Tech Stack & Dependencies
 
-## Deployment
+- **Framework:** [Next.js](https://nextjs.org/) (v15)
+- **UI & Styling:** Tailwind CSS, Radix UI, Lucide React Icons
+- **State & Forms:** React, React Hook Form, Zod
+- **Blockchain:** Simulated wallet connection (can be extended for real blockchain integration)
+- **Other:** date-fns, recharts, embla-carousel-react, and more
 
-Your project is live at:
+### Main dependencies (from `package.json`):
 
-**[https://vercel.com/dxmaptins-projects/v0-nft-ticket-prototype](https://vercel.com/dxmaptins-projects/v0-nft-ticket-prototype)**
+- `next`
+- `react`, `react-dom`
+- `@radix-ui/react-*` (various UI primitives)
+- `tailwindcss`, `postcss`, `autoprefixer`
+- `react-hook-form`, `zod`
+- `clsx`, `lucide-react`, `date-fns`, `recharts`
+- See `package.json` for the full list.
 
-## Build your app
+## Getting Started
 
-Continue building your app on:
+### Prerequisites
 
-**[https://v0.dev/chat/projects/6zlNqLskafA](https://v0.dev/chat/projects/6zlNqLskafA)**
+- [Node.js](https://nodejs.org/) (v18 or newer recommended)
+- [pnpm](https://pnpm.io/) (or use npm/yarn, but pnpm is recommended for this project)
 
-## How It Works
+### Installation
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/dxmaptin/Eureka.git
+   cd <project-directory>
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pnpm install
+   # or
+   npm install
+   # or
+   yarn install
+   ```
+
+### Running the Development Server
+
+```bash
+pnpm dev
+# or
+npm run dev
+# or
+yarn dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the app.
+
+### Building for Production
+
+```bash
+pnpm build
+pnpm start
+# or
+npm run build && npm start
+# or
+yarn build && yarn start
+```
+
+### Linting
+
+```bash
+pnpm lint
+# or
+npm run lint
+# or
+yarn lint
+```
+
+## Wallet Integration
+
+The app includes a simulated wallet connection for demo purposes. For real blockchain integration, extend the `WalletProvider` in `context/wallet-context.tsx` to connect to actual wallet providers (e.g., MetaMask, WalletConnect).
+
+## Project Structure
+
+- `app/` - Main Next.js app directory (pages, layouts, etc.)
+- `components/` - Reusable UI components
+- `context/` - React context providers (e.g., wallet)
+- `styles/` - Global and component styles
+- `public/` - Static assets
+
+## Customization
+
+- Update event data in `app/page.tsx` or connect to a backend for dynamic events.
+- Customize UI components in the `components/` directory.
+
+## License
+
+MIT
