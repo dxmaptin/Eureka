@@ -28,7 +28,7 @@ export default function RootLayout({
           <WalletProvider>
             <div className="flex flex-col min-h-screen">
               <Header />
-              <main className="flex-grow pt-28">{children}</main>
+              <main className="flex-grow">{children}</main>
               <Footer />
             </div>
             <Toaster />
