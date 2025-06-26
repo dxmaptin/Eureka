@@ -47,8 +47,8 @@ export interface Venue {
 export const artists: Artist[] = [
   {
     id: "a1",
-    name: "DJ Crypto",
-    image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4",
+    name: "Phantom Flow",
+    image: "/cypher.png",
     bio: "DJ Crypto is a pioneer in blending electronic music with blockchain themes, energizing crowds worldwide.",
     social: {
       twitter: "https://twitter.com",
@@ -61,7 +61,7 @@ export const artists: Artist[] = [
   },
   {
     id: "a2",
-    name: "NFT Artists Collective",
+    name: "Aura Vibe",
     image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e",
     bio: "A group of digital creators pushing the boundaries of art and technology.",
     social: {
@@ -78,7 +78,7 @@ export const venues: Venue[] = [
   {
     id: "v1",
     name: "Metaverse Arena",
-    image: "https://images.unsplash.com/photo-1559767948-1f383c6ab3c0",
+    image: "/metaverse_arena.png",
     bio: "A state-of-the-art virtual venue hosting immersive events in the metaverse.",
     social: {
       website: "https://example.com",
@@ -90,7 +90,7 @@ export const venues: Venue[] = [
   {
     id: "v2",
     name: "Blockchain Center",
-    image: "https://images.unsplash.com/photo-1509099836639-18ba3b9947a6",
+    image: "/blockchain_center.png",
     bio: "The hub for all things blockchain, offering conferences and hackathons year round.",
     social: {
       twitter: "https://twitter.com",
