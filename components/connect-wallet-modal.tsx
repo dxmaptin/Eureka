@@ -19,13 +19,9 @@ export function ConnectWalletModal({ isOpen, onClose }: ConnectWalletModalProps)
 
   const handleConnect = async (walletType: string) => {
     setIsConnecting(true)
-
-    // Simulate connection delay
-    setTimeout(() => {
-      connect(walletType)
-      setIsConnecting(false)
-      onClose()
-    }, 1500)
+    await connect(walletType)
+    setIsConnecting(false)
+    onClose()
   }
 
   return (
