@@ -48,7 +48,7 @@ export default function Header() {
   }
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 transition-all duration-300">
+    <div className="fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-300">
       <nav
         className={`rounded-full bg-slate-900/90 backdrop-blur-lg shadow-lg transition-all duration-300 flex items-center ${
           scrolled ? "px-6 py-2 w-[90%] max-w-3xl" : "px-8 py-3 w-[95%] max-w-4xl"
