@@ -7,6 +7,8 @@ import Footer from "@/components/footer"
 import { WalletProvider } from "@/context/wallet-context"
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/theme-provider"
+import dynamic from "next/dynamic"
+import ChatbotClientWrapper from "@/components/ChatbotClientWrapper"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -28,12 +30,13 @@ export default function RootLayout({
           <WalletProvider>
             <div className="flex flex-col min-h-screen">
               <Header />
-              <main className="flex-grow pt-28">{children}</main>
+              <main className="flex-grow">{children}</main>
               <Footer />
             </div>
             <Toaster />
           </WalletProvider>
         </ThemeProvider>
+        <ChatbotClientWrapper />
       </body>
     </html>
   )

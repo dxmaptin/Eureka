@@ -8,18 +8,12 @@ import { artists, venues, events } from "@/lib/data"
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 pb-24 pt-28">
         <div className="mb-12 text-center">
-          <h1 className="text-4xl font-bold text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            NFT Ticket Marketplace
-          </h1>
-          <p className="text-slate-300 max-w-2xl mx-auto">
-            Purchase tickets as NFTs for your favorite events. Secure, transferable, and always authentic.
-          </p>
         </div>
 
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-4">Artists & Venues</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">Exclusive partners</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {artists.map((artist) => (
               <Link href={`/artists/${artist.id}`} key={artist.id}>
@@ -50,6 +44,7 @@ export default function Home() {
           </div>
         </div>
 
+        <h2 className="text-2xl font-bold text-white mb-6">View All Events</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => (
             <Link href={`/events/${event.id}`} key={event.id}>

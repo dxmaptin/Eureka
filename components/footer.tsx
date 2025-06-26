@@ -11,7 +11,7 @@ export default function Footer() {
             <Link href="/" className="flex items-center space-x-2 mb-4">
               <Ticket className="h-6 w-6 text-purple-500" />
               <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-                NFTickets
+                Eurekas
               </span>
             </Link>
             <p className="text-slate-400 text-sm">
@@ -97,11 +97,11 @@ export default function Footer() {
             <h3 className="text-white font-semibold mb-4">Contact Us</h3>
             <div className="space-y-3">
               <a
-                href="mailto:info@nftickets.com"
+                href="mailto:info@Eurekas.com"
                 className="flex items-center text-slate-400 hover:text-purple-400 transition-colors text-sm"
               >
                 <Mail className="h-4 w-4 mr-2" />
-                info@nftickets.com
+                info@Eurekas.com
               </a>
               <p className="text-slate-400 text-sm">
                 123 Blockchain Avenue
@@ -114,7 +114,7 @@ export default function Footer() {
 
         <div className="border-t border-slate-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-slate-500 text-sm mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} NFTickets. All rights reserved.
+            &copy; {new Date().getFullYear()} Eurekas. All rights reserved.
           </p>
           <div className="flex space-x-6">
             <Link href="#" className="text-slate-500 hover:text-purple-400 transition-colors text-sm">

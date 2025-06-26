@@ -9,31 +9,43 @@ export default function AboutPage() {
       <div className="container mx-auto px-4 py-12">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            About NFTickets
-          </h1>
-          <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-            Revolutionizing event ticketing with blockchain technology
-          </p>
         </div>
 
         {/* Executive Summary */}
-        <Card className="bg-slate-800/50 border-slate-700 mb-12 overflow-hidden">
+        <Card className="bg-slate-800/50 border-slate-700 mb-12 overflow-hidden pt-12">
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10" />
             <CardContent className="p-8 relative">
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Executive Summary</h2>
               <p className="text-slate-300 mb-6 leading-relaxed">
                 Traditional ticketing faces rampant fraud, unpredictable pricing, and opaque revenue flows that
-                disadvantage organizers and fans alike. NFTickets's blockchain-enabled platform remedies these
+                disadvantage organizers and fans alike. Eurekas's blockchain-enabled platform remedies these
                 shortcomings by minting tickets as NFTs, enforcing programmable royalties, and integrating dynamic
                 ticket validation for secure entry. By providing seamless onboarding for both web2 and web3 users
                 through email sign-up or wallet connection, alongside flexible payment options in both fiat and crypto,
-                NFTickets creates an intuitive experience that meets users at their level of blockchain familiarity.
+                Eurekas creates an intuitive experience that meets users at their level of blockchain familiarity.
               </p>
             </CardContent>
           </div>
         </Card>
+
+        <div className="flex justify-center mb-12">
+          <Card className="bg-slate-800/50 border-slate-700 overflow-hidden w-full max-w-2xl">
+            <CardContent className="p-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 text-center">Watch Our Introduction</h2>
+              <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-lg">
+                <iframe
+                  className="absolute top-0 left-0 w-full h-full"
+                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                  title="Introduction Video"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Mission & Vision + Value Proposition */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
@@ -86,7 +98,7 @@ export default function AboutPage() {
             <CardContent className="p-8">
               <h2 className="text-2xl font-bold text-white mb-6">Value Proposition</h2>
               <p className="text-slate-300 mb-6">
-                By addressing the critical challenges of ticket scalping and inflated resale prices, NFTickets creates a
+                By addressing the critical challenges of ticket scalping and inflated resale prices, Eurekas creates a
                 win-win scenario for both event organizers and attendees.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -171,9 +183,9 @@ export default function AboutPage() {
                 <CardContent className="p-6">
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="item-1" className="border-slate-700">
-                      <AccordionTrigger className="text-white">What is NFTickets?</AccordionTrigger>
+                      <AccordionTrigger className="text-white">What is Eurekas?</AccordionTrigger>
                       <AccordionContent className="text-slate-300">
-                        NFTickets is a blockchain-based ticketing platform that converts event tickets into NFTs
+                        Eurekas is a blockchain-based ticketing platform that converts event tickets into NFTs
                         (Non-Fungible Tokens), providing enhanced security, transparency, and new opportunities for both
                         event organizers and attendees.
                       </AccordionContent>
@@ -181,10 +193,10 @@ export default function AboutPage() {
 
                     <AccordionItem value="item-2" className="border-slate-700">
                       <AccordionTrigger className="text-white">
-                        How does NFTickets prevent ticket scalping?
+                        How does Eurekas prevent ticket scalping?
                       </AccordionTrigger>
                       <AccordionContent className="text-slate-300">
-                        NFTickets uses smart contracts to enforce price caps on resales and ensures that a percentage of
+                        Eurekas uses smart contracts to enforce price caps on resales and ensures that a percentage of
                         secondary sales goes back to event organizers. This reduces the incentive for scalping while
                         creating a more sustainable ecosystem.
                       </AccordionContent>
@@ -192,10 +204,10 @@ export default function AboutPage() {
 
                     <AccordionItem value="item-3" className="border-slate-700">
                       <AccordionTrigger className="text-white">
-                        Do I need to understand blockchain to use NFTickets?
+                        Do I need to understand blockchain to use Eurekas?
                       </AccordionTrigger>
                       <AccordionContent className="text-slate-300">
-                        Not at all! We've designed NFTickets to be user-friendly for everyone. You can sign up with just
+                        Not at all! We've designed Eurekas to be user-friendly for everyone. You can sign up with just
                         an email address and purchase tickets with a credit card. The blockchain technology works behind
                         the scenes to provide you with benefits without requiring technical knowledge.
                       </AccordionContent>
@@ -221,7 +233,7 @@ export default function AboutPage() {
                     <AccordionItem value="item-2" className="border-slate-700">
                       <AccordionTrigger className="text-white">How do I access my NFT tickets?</AccordionTrigger>
                       <AccordionContent className="text-slate-300">
-                        Your tickets are accessible through your NFTickets account. Simply log in to view your tickets
+                        Your tickets are accessible through your Eurekas account. Simply log in to view your tickets
                         in the "My Tickets" section. Each ticket includes a QR code that will be scanned for entry at
                         the event.
                       </AccordionContent>
@@ -260,7 +272,7 @@ export default function AboutPage() {
                     <AccordionItem value="item-1" className="border-slate-700">
                       <AccordionTrigger className="text-white">What payment methods are accepted?</AccordionTrigger>
                       <AccordionContent className="text-slate-300">
-                        NFTickets accepts both traditional payment methods (credit/debit cards) and cryptocurrency
+                        Eurekas accepts both traditional payment methods (credit/debit cards) and cryptocurrency
                         payments. You can choose your preferred payment method during checkout.
                       </AccordionContent>
                     </AccordionItem>
@@ -287,10 +299,10 @@ export default function AboutPage() {
 
                     <AccordionItem value="item-4" className="border-slate-700">
                       <AccordionTrigger className="text-white">
-                        Do I need cryptocurrency to use NFTickets?
+                        Do I need cryptocurrency to use Eurekas?
                       </AccordionTrigger>
                       <AccordionContent className="text-slate-300">
-                        No, you don't need cryptocurrency to use NFTickets. While we support crypto payments, you can
+                        No, you don't need cryptocurrency to use Eurekas. While we support crypto payments, you can
                         purchase tickets using traditional payment methods like credit cards. The blockchain benefits
                         are still applied to your tickets regardless of your payment method.
                       </AccordionContent>
@@ -311,7 +323,7 @@ export default function AboutPage() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <a
-                href="mailto:support@nftickets.com"
+                href="mailto:support@Eurekas.com"
                 className="inline-flex items-center justify-center px-6 py-3 rounded-md bg-purple-600 text-white hover:bg-purple-700 transition-colors"
               >
                 Contact Support
