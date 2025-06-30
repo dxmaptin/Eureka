@@ -24,7 +24,7 @@ const Chatbot = () => {
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey] = useState('sk-47UYUxBCMR1g30UTmk3bt9XJrqTmrgxAA64XohDz4WT3BlbkFJnRdn0HiFTxNFxIXKlOLWCNgD0GNRDynHgmJNg0zRUA');
+  const [apiKey] = useState('use your key');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
