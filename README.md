@@ -1,6 +1,6 @@
-# NFT Ticket Marketplace
+# Eureka
 
-NFT Ticket Marketplace is a modern web application that allows users to purchase, manage, and transfer event tickets as NFTs (Non-Fungible Tokens). The platform ensures secure, authentic, and easily transferable tickets for a variety of events, leveraging blockchain wallet integration for seamless user experience.
+Eureka is a modern web application that allows users to purchase, manage, and transfer event tickets as NFTs (Non-Fungible Tokens). The platform ensures secure, authentic, and easily transferable tickets for a variety of events, leveraging blockchain wallet integration for seamless user experience.
 
 ## Features
 
