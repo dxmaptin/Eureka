@@ -1,6 +1,6 @@
 "use client"
 
-import { ethers, formatEther } from "ethers"
+import { ethers } from "ethers"
 import { createContext, useContext, useState, type ReactNode } from "react"
 import { useToast } from "@/components/ui/use-toast"
 
@@ -57,7 +57,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     // Get Balance of the connected account
     const provider = new (ethers as any).Web3Provider(window.ethereum)
     const balanceValue = await provider.getBalance(address)
-    setBalance(formatEther(balanceValue))
+    setBalance(ethers.utils.formatEther(balanceValue))
     toast({
       title: "Wallet Connected",
       description: `Successfully connected to ${type} wallet`,
