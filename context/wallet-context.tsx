@@ -1,7 +1,15 @@
 "use client"
 
+import { ethers, formatEther } from "ethers"
 import { createContext, useContext, useState, type ReactNode } from "react"
 import { useToast } from "@/components/ui/use-toast"
+
+//For ethereum declaration
+declare global {
+  interface Window {
+    ethereum?: any;
+  }
+}
 
 interface WalletContextType {
   isConnected: boolean
@@ -21,24 +29,60 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [walletType, setWalletType] = useState<string | null>(null)
   const { toast } = useToast()
 
-  const connect = (type: string) => {
-    // Simulate wallet connection
-    setIsConnected(true)
-    setWalletType(type)
-
-    // Generate a random Ethereum address
-    const randomAddress = `0x${Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`
-    setAddress(randomAddress)
-
-    // Set a random balance
-    const randomBalance = (Math.random() * 5).toFixed(3)
-    setBalance(randomBalance)
-
+  const connect = async (type: string) => {
+    if (type === "metamask") {
+      if (typeof window === "undefined" || !window.ethereum) {
+        toast({
+          title: "MetaMask Not Found",
+          description: "Please install MetaMask to connect your wallet.",
+          variant: "destructive",
+        })
+        return
+      }
+      try {
+     // Request account access
+      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" })
+      const address = accounts[0]
+      setIsConnected(true)
+      setWalletType(type)
+      setAddress(address)
+    } catch (error) {
+      console.error("Error connecting to MetaMask:", error)
+      toast({
+        title: "Error Connecting to MetaMask",
+        description: "Please try again.",
+        variant: "destructive",
+      })
+    }
+    // Get Balance of the connected account
+    const provider = new (ethers as any).Web3Provider(window.ethereum)
+    const balanceValue = await provider.getBalance(address)
+    setBalance(formatEther(balanceValue))
     toast({
       title: "Wallet Connected",
       description: `Successfully connected to ${type} wallet`,
     })
   }
+}
+
+  //   // Simulate wallet connection
+
+  //   setIsConnected(true)
+  //   setWalletType(type)
+
+  //   // Generate a random Ethereum address
+  //   const randomAddress = `0x${Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`
+  //   setAddress(randomAddress)
+
+  //   // Set a random balance
+  //   const randomBalance = (Math.random() * 5).toFixed(3)
+  //   setBalance(randomBalance)
+
+  //   toast({
+  //     title: "Wallet Connected",
+  //     description: `Successfully connected to ${type} wallet`,
+  //   })
+  // }
 
   const disconnect = () => {
     setIsConnected(false)
