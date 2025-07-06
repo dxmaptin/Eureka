@@ -40,30 +40,31 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         return
       }
       try {
-     // Request account access
-      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" })
-      const address = accounts[0]
-      setIsConnected(true)
-      setWalletType(type)
-      setAddress(address)
-    } catch (error) {
-      console.error("Error connecting to MetaMask:", error)
-      toast({
-        title: "Error Connecting to MetaMask",
-        description: "Please try again.",
-        variant: "destructive",
-      })
+        // Request account access
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" })
+        const address = accounts[0]
+        setIsConnected(true)
+        setWalletType(type)
+        setAddress(address)
+        
+        // Get Balance of the connected account
+        const provider = new ethers.BrowserProvider(window.ethereum)
+        const balanceValue = await provider.getBalance(address)
+        setBalance(ethers.formatEther(balanceValue))
+        toast({
+          title: "Wallet Connected",
+          description: `Successfully connected to ${type} wallet`,
+        })
+      } catch (error) {
+        console.error("Error connecting to MetaMask:", error)
+        toast({
+          title: "Error Connecting to MetaMask",
+          description: "Please try again.",
+          variant: "destructive",
+        })
+      }
     }
-    // Get Balance of the connected account
-    const provider = new (ethers as any).Web3Provider(window.ethereum)
-    const balanceValue = await provider.getBalance(address)
-    setBalance(ethers.utils.formatEther(balanceValue))
-    toast({
-      title: "Wallet Connected",
-      description: `Successfully connected to ${type} wallet`,
-    })
   }
-}
 
   //   // Simulate wallet connection
 

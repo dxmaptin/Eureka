@@ -24,7 +24,6 @@ const Chatbot = () => {
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey] = useState('use your key');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
@@ -52,11 +51,6 @@ const Chatbot = () => {
 
   const sendMessage = async () => {
     if (!inputMessage.trim()) return;
-    
-    if (!apiKey) {
-      alert('Please enter your OpenAI API key first.');
-      return;
-    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -70,43 +64,24 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'gpt-4o',
-          messages: [
-            {
-              role: 'system',
-              content: `You are an AI assistant representing *Eureka*, the Web3 evolution of Toutix — a next-gen ticketing platform that eliminates scalping, 
-              restores revenue to event creators, and transforms tickets into on-chain digital credentials. Eureka mints every ticket as an NFT, enforces programmable 
-              royalties, and verifies ownership at the gate using dynamic QR and NFC codes. Fans onboard seamlessly via email or wallet, with fiat and crypto payments 
-              supported. Under the hood, Eureka runs on Solana for speed and low fees, but presents a frictionless experience that feels Web2. Beyond ticketing, Eureka 
-              unlocks a new monetization layer: turning fan identity and attendance into the foundation for digital IP, loyalty, and community ownership. It's not just a 
-              ticket — it's infrastructure for the future of entertainment.
-            Be helpful, professional, and knowledgeable about his work. If asked about something not in his background, politely redirect to his actual experience.`
-            },
-            {
-              role: 'user',
-              content: inputMessage
-            }
-          ],
-          temperature: 0.7,
-          max_tokens: 300
+          message: inputMessage
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to get response from OpenAI');
+        throw new Error('Failed to get response from AI');
       }
 
       const data = await response.json();
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: data.choices[0].message.content,
+        content: data.content,
         sender: 'bot',
         timestamp: new Date()
       };
@@ -232,12 +207,12 @@ const Chatbot = () => {
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Ask about Eureka's experience..."
-              disabled={isLoading || !apiKey}
+              disabled={isLoading}
               className="flex-1"
             />
             <Button
               onClick={sendMessage}
-              disabled={isLoading || !inputMessage.trim() || !apiKey}
+              disabled={isLoading || !inputMessage.trim()}
               size="icon"
               className="bg-slate-900 hover:bg-slate-800"
             >
