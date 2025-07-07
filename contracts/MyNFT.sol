@@ -11,7 +11,7 @@ contract MyNFT is ERC721URIStorage, Ownable {
     // Pass msg.sender as the initial owner to Ownable constructor
     constructor() ERC721("MyNFTCollection", "MNC") Ownable(msg.sender) {}
 
-    function mintNFT(address to, string memory tokenURI) public payable returns (uint256) {
+    function mintNFT(address to, string memory tokenURI) public payable onlyOwner returns (uint256) {
         require(msg.value >= mintPrice, "Insufficient payment");
         uint256 tokenId = _tokenIdCounter;
         _tokenIdCounter++;
