@@ -43,7 +43,7 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
   }
 
   // Pruchase process
-  const CONTRACT_ADDRESS = "0xF2f6694Ee1693E1b5D6Bac63Cf0e54A52F517D55";
+  const CONTRACT_ADDRESS = "0xbE33544a1Ad0F5Aaf9ba28Fd534D268B964c27C8";
   const METADATA_URI = "https://ipfs.io/ipfs/bafkreigjlju3g3lbfoo5vugyioakk4hdskzssp4f6dpw77b4ibt62gp5ay";
 
   const handlePurchase = async () => {
