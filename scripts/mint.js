@@ -1,9 +1,9 @@
 const { ethers } = require("hardhat");
 
 async function main() {
-  const contractAddress = "0xa6ed96110F9cBDBe8616a63Ce7Ed5D2F37752d1C";
+  const contractAddress = "0xF2f6694Ee1693E1b5D6Bac63Cf0e54A52F517D55";
   const userAddress = "0x0d25c5EFB20adEA2FC2AAA861C19A07BbD94678D";
-  const metadataURI = "https://ipfs.io/ipfs/bafkreicbxcp7iczqkvu3ypiumezttuw5elyisfo4e5carufmpxfln5xhuq";
+  const metadataURI = "https://ipfs.io/ipfs/bafkreigjlju3g3lbfoo5vugyioakk4hdskzssp4f6dpw77b4ibt62gp5ay";
 
   // Get the first signer (the deployer or the account from your private key)
   const [signer] = await ethers.getSigners();

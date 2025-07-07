@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useWallet } from "@/context/wallet-context"
 import { useToast } from "@/components/ui/use-toast"
 import { ArrowLeft, CreditCard, Wallet, Check, Loader2, ExternalLink } from "lucide-react"
+import { ethers } from "ethers"
+import MyNFTAbi from "@/artifacts/contracts/MyNFT.sol/MyNFT.json"
 
 export default function PurchasePage({ params }: { params: { id: string } }) {
   const router = useRouter()
@@ -40,26 +42,37 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
     return <div className="container mx-auto px-4 py-8 text-center">Event not found</div>
   }
 
-  const handlePurchase = () => {
-    // Simulate purchase process
-    setPurchaseStatus("processing")
+  // Pruchase process
+  const CONTRACT_ADDRESS = "0xF2f6694Ee1693E1b5D6Bac63Cf0e54A52F517D55";
+  const METADATA_URI = "https://ipfs.io/ipfs/bafkreigjlju3g3lbfoo5vugyioakk4hdskzssp4f6dpw77b4ibt62gp5ay";
 
-    setTimeout(() => {
+  const handlePurchase = async () => {
+    setPurchaseStatus("processing")
+    try {
+      // Wait for payment simulation (replace with real payment logic if needed)
+      await new Promise((res) => setTimeout(res, 1500))
       setPurchaseStatus("minting")
 
-      // Generate a random transaction hash
-      const randomHash = `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`
-      setTransactionHash(randomHash)
-
-      setTimeout(() => {
-        setPurchaseStatus("completed")
-
-        toast({
-          title: "Purchase Successful",
-          description: "Your NFT tickets have been minted and added to your wallet",
-        })
-      }, 3000)
-    }, 2000)
+      if (!window.ethereum) throw new Error("No wallet found")
+      const provider = new ethers.BrowserProvider(window.ethereum)
+      const signer = await provider.getSigner()
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, MyNFTAbi.abi, signer)
+      const tx = await contract.mintNFT(address, METADATA_URI)
+      setTransactionHash(tx.hash)
+      await tx.wait()
+      setPurchaseStatus("completed")
+      toast({
+        title: "Purchase Successful",
+        description: "Your NFT ticket has been minted and added to your wallet",
+      })
+    } catch (err) {
+      setPurchaseStatus("idle")
+      toast({
+        title: "Minting Failed",
+        description: err instanceof Error ? err.message : "Transaction failed.",
+        variant: "destructive",
+      })
+    }
   }
 
   const handleBack = () => {
