@@ -15,7 +15,7 @@ contract MyNFT is ERC721URIStorage, ERC2981, Ownable {
       _setDefaultRoyalty(msg.sender, 500); // 500 = 5% (denominator is 10000)
     }
 
-    function mintNFT(address to, string memory tokenURI) public payable onlyOwner returns (uint256) {
+    function mintNFT(address to, string memory tokenURI) public payable returns (uint256) {
         require(msg.value >= mintPrice, "Insufficient payment");
         uint256 tokenId = _tokenIdCounter;
         _tokenIdCounter++;
