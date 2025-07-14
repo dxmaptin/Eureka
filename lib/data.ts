@@ -5,7 +5,17 @@ export interface Event {
   time: string
   location: string
   category: string
-  price: number
+  /**
+   * Price of the event ticket in USD. This value is pre‑converted from the
+   * original cryptocurrency price so that the frontend can display USD by
+   * default.
+   */
+  priceUsd: number
+  /**
+   * Original price in Ether. Shown alongside the USD price when a wallet is
+   * connected.
+   */
+  priceEth: number
   image: string
   soldTickets: number
   totalTickets: number
@@ -110,7 +120,8 @@ export const events: Event[] = [
     time: "10:00 AM",
     location: "San Francisco, CA",
     category: "Conference",
-    price: 0.15,
+    priceUsd: 450,
+    priceEth: 0.15,
     image: "https://www.cryptotimes.io/wp-content/uploads/2025/03/DC-BLOCKCHAIN-SUMMIT-2025.jpg",
     soldTickets: 156,
     totalTickets: 200,
@@ -124,7 +135,8 @@ export const events: Event[] = [
     time: "6:00 PM",
     location: "New York, NY",
     category: "Exhibition",
-    price: 0.08,
+    priceUsd: 240,
+    priceEth: 0.08,
     image: "https://www.tokyoweekender.com/wp-content/uploads/2021/07/CrypTOKYO-Press-Preview-and-VIP-invite-2-1.jpg",
     soldTickets: 89,
     totalTickets: 150,
@@ -138,7 +150,8 @@ export const events: Event[] = [
     time: "4:00 PM",
     location: "Miami, FL",
     category: "Festival",
-    price: 0.25,
+    priceUsd: 750,
+    priceEth: 0.25,
     image: "https://www.billboard.com/wp-content/uploads/2022/03/BILLBOARD-BLOCKCHAIN-02-b-Explainer-Shira-Inbar-1548.jpg?w=681&h=383&crop=1",
     soldTickets: 412,
     totalTickets: 500,
@@ -152,7 +165,8 @@ export const events: Event[] = [
     time: "9:00 AM",
     location: "Austin, TX",
     category: "Conference",
-    price: 0.12,
+    priceUsd: 360,
+    priceEth: 0.12,
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuAdxCvhlZ3iQmT_guNOl6ipJ3SoFpKDvYjT9l4YTIgMFrCA6rzn2M7uIv1__7rjjLzTI&usqp=CAU",
     soldTickets: 78,
     totalTickets: 300,
@@ -166,7 +180,8 @@ export const events: Event[] = [
     time: "8:00 PM",
     location: "Los Angeles, CA",
     category: "Concert",
-    price: 0.18,
+    priceUsd: 540,
+    priceEth: 0.18,
     image: "https://images.theconversation.com/files/414962/original/file-20210806-17-jibbct.jpg?ixlib=rb-4.1.0&rect=0%2C5%2C2000%2C1116&q=20&auto=format&w=320&fit=clip&dpr=2&usm=12&cs=strip",
     soldTickets: 245,
     totalTickets: 400,
@@ -180,7 +195,8 @@ export const events: Event[] = [
     time: "2:00 PM",
     location: "Seattle, WA",
     category: "Gaming",
-    price: 0.05,
+    priceUsd: 150,
+    priceEth: 0.05,
     image: "https://venturebeat.com/wp-content/uploads/2021/03/article23-1.jpg",
     soldTickets: 120,
     totalTickets: 250,

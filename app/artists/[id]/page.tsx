@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { CalendarDays, Clock, MapPin, Twitter, Instagram, Globe, Ticket } from "lucide-react"
 import { artists, events } from "@/lib/data"
+import { Price } from "@/components/price"
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
@@ -87,9 +88,11 @@ export default function ArtistPage({ params }: { params: { id: string } }) {
                           <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-medium">
                             {event.category}
                           </span>
-                          <span className="bg-slate-900 bg-opacity-80 text-white px-3 py-1 rounded-full text-xs font-medium">
-                            {event.price} ETH
-                          </span>
+                          <Price
+                            usd={event.priceUsd}
+                            eth={event.priceEth}
+                            className="bg-slate-900 bg-opacity-80 text-white px-3 py-1 rounded-full text-xs font-medium"
+                          />
                         </div>
                       </div>
                     </div>

@@ -11,6 +11,7 @@ import { ConnectWalletModal } from "@/components/connect-wallet-modal"
 import { useToast } from "@/components/ui/use-toast"
 import { CalendarDays, Clock, MapPin, Ticket, Users, ChevronRight, Info, Share2 } from "lucide-react"
 import { events } from "@/lib/data"
+import { Price } from "@/components/price"
 
 export default function EventPage({ params }: { params: { id: string } }) {
   const router = useRouter()
@@ -48,6 +49,9 @@ export default function EventPage({ params }: { params: { id: string } }) {
       description: "Sharing functionality would be implemented here",
     })
   }
+
+  const feeUsd = 6
+  const feeEth = 0.002
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
@@ -130,7 +134,9 @@ export default function EventPage({ params }: { params: { id: string } }) {
           <div>
             <Card className="bg-slate-800 border-slate-700 sticky top-20">
               <CardContent className="p-6">
-                <div className="text-2xl font-bold text-white mb-2">{event.price} ETH</div>
+                <div className="text-2xl font-bold text-white mb-2">
+                  <Price usd={event.priceUsd} eth={event.priceEth} />
+                </div>
                 <div className="text-sm text-slate-400 mb-4">per ticket</div>
 
                 <div className="mb-1 flex justify-between text-xs text-slate-400">
@@ -169,16 +175,26 @@ export default function EventPage({ params }: { params: { id: string } }) {
                 <div className="mb-6">
                   <div className="flex justify-between text-slate-300 mb-2">
                     <span>Subtotal</span>
-                    <span>{(event.price * quantity).toFixed(2)} ETH</span>
+                    <span>
+                      {isConnected
+                        ? `$${(event.priceUsd * quantity).toFixed(2)} / ${(event.priceEth * quantity).toFixed(3)} ETH`
+                        : `$${(event.priceUsd * quantity).toFixed(2)}`}
+                    </span>
                   </div>
                   <div className="flex justify-between text-slate-300 mb-2">
-                    <span>Gas fee (est.)</span>
-                    <span>0.002 ETH</span>
+                    <span>Transaction fee (est.)</span>
+                    <span>
+                      {isConnected ? `$${feeUsd} / ${feeEth} ETH` : `$${feeUsd}`}
+                    </span>
                   </div>
                   <Separator className="my-2 bg-slate-700" />
                   <div className="flex justify-between text-white font-semibold">
                     <span>Total</span>
-                    <span>{(event.price * quantity + 0.002).toFixed(3)} ETH</span>
+                    <span>
+                      {isConnected
+                        ? `$${(event.priceUsd * quantity + feeUsd).toFixed(2)} / ${(event.priceEth * quantity + feeEth).toFixed(3)} ETH`
+                        : `$${(event.priceUsd * quantity + feeUsd).toFixed(2)}`}
+                    </span>
                   </div>
                 </div>
 

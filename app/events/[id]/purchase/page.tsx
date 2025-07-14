@@ -10,6 +10,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { ArrowLeft, CreditCard, Wallet, Check, Loader2, ExternalLink } from "lucide-react"
 import { ethers } from "ethers"
 import MyNFTAbi from "@/artifacts/contracts/MyNFT.sol/MyNFT.json"
+import { Price } from "@/components/price"
 
 export default function PurchasePage({ params }: { params: { id: string } }) {
   const router = useRouter()
@@ -24,6 +25,8 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
 
   // Find event by ID (in a real app, this would be fetched from an API)
   const event = events.find((e) => e.id === params.id)
+  const feeUsd = 6
+  const feeEth = 0.002
 
   useEffect(() => {
     // Get quantity from URL params
@@ -253,18 +256,26 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
                 <div className="border-t border-slate-700 pt-4 mt-4">
                   <div className="flex justify-between text-slate-300 mb-2">
                     <span>Tickets ({quantity})</span>
-                    <span>{(event.price * quantity).toFixed(2)} ETH</span>
+                    <span>
+                      {isConnected
+                        ? `$${(event.priceUsd * quantity).toFixed(2)} / ${(event.priceEth * quantity).toFixed(3)} ETH`
+                        : `$${(event.priceUsd * quantity).toFixed(2)}`}
+                    </span>
                   </div>
 
                   <div className="flex justify-between text-slate-300 mb-2">
-                    <span>Gas fee (est.)</span>
-                    <span>0.002 ETH</span>
+                    <span>Transaction fee (est.)</span>
+                    <span>{isConnected ? `$${feeUsd} / ${feeEth} ETH` : `$${feeUsd}`}</span>
                   </div>
 
                   <div className="border-t border-slate-700 pt-2 mt-2">
                     <div className="flex justify-between text-white font-semibold">
                       <span>Total</span>
-                      <span>{(event.price * quantity + 0.002).toFixed(3)} ETH</span>
+                      <span>
+                        {isConnected
+                          ? `$${(event.priceUsd * quantity + feeUsd).toFixed(2)} / ${(event.priceEth * quantity + feeEth).toFixed(3)} ETH`
+                          : `$${(event.priceUsd * quantity + feeUsd).toFixed(2)}`}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -312,7 +323,8 @@ const events = [
     time: "10:00 AM",
     location: "San Francisco, CA",
     category: "Conference",
-    price: 0.15,
+    priceUsd: 450,
+    priceEth: 0.15,
     image: "/placeholder.svg?height=400&width=600",
     soldTickets: 156,
     totalTickets: 200,
@@ -324,7 +336,8 @@ const events = [
     time: "6:00 PM",
     location: "New York, NY",
     category: "Exhibition",
-    price: 0.08,
+    priceUsd: 240,
+    priceEth: 0.08,
     image: "/placeholder.svg?height=400&width=600",
     soldTickets: 89,
     totalTickets: 150,
@@ -336,7 +349,8 @@ const events = [
     time: "4:00 PM",
     location: "Miami, FL",
     category: "Festival",
-    price: 0.25,
+    priceUsd: 750,
+    priceEth: 0.25,
     image: "/placeholder.svg?height=400&width=600",
     soldTickets: 412,
     totalTickets: 500,
@@ -348,7 +362,8 @@ const events = [
     time: "9:00 AM",
     location: "Austin, TX",
     category: "Conference",
-    price: 0.12,
+    priceUsd: 360,
+    priceEth: 0.12,
     image: "/placeholder.svg?height=400&width=600",
     soldTickets: 78,
     totalTickets: 300,
@@ -360,7 +375,8 @@ const events = [
     time: "8:00 PM",
     location: "Los Angeles, CA",
     category: "Concert",
-    price: 0.18,
+    priceUsd: 540,
+    priceEth: 0.18,
     image: "/placeholder.svg?height=400&width=600",
     soldTickets: 245,
     totalTickets: 400,
@@ -372,7 +388,8 @@ const events = [
     time: "2:00 PM",
     location: "Seattle, WA",
     category: "Gaming",
-    price: 0.05,
+    priceUsd: 150,
+    priceEth: 0.05,
     image: "/placeholder.svg?height=400&width=600",
     soldTickets: 120,
     totalTickets: 250,
