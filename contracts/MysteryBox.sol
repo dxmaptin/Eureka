@@ -17,7 +17,7 @@ interface IMyNFT {
 contract MysteryBox is UUPSUpgradeable, OwnableUpgradeable {
     // Chainlink VRF variables
     VRFCoordinatorV2Interface public COORDINATOR;
-    uint64 public vrfSubscriptionId;
+    uint256 public vrfSubscriptionId; // uint256 for VRF v2.5 compatibility
     bytes32 public vrfKeyHash;
     uint32 public vrfCallbackGasLimit;
     uint16 public vrfRequestConfirmations;
@@ -53,12 +53,14 @@ contract MysteryBox is UUPSUpgradeable, OwnableUpgradeable {
     event PrizeRemoved(string prizeURI);
     event BoxPriceUpdated(uint256 newPrice);
     event Withdraw(address indexed to, uint256 amount);
+    event SubscriptionIdUpdated(uint256 oldSubId, uint256 newSubId);
+    event VRFConfigUpdated(bytes32 keyHash, uint32 callbackGasLimit, uint16 requestConfirmations);
 
     //  Initializer (replaces constructor for upgradeable contracts) 
     function initialize(
         address _myNFTAddress,
         address _vrfCoordinator,
-        uint64 _vrfSubscriptionId,
+        uint256 _vrfSubscriptionId,
         bytes32 _vrfKeyHash,
         uint32 _vrfCallbackGasLimit,
         uint16 _vrfRequestConfirmations
@@ -74,6 +76,18 @@ contract MysteryBox is UUPSUpgradeable, OwnableUpgradeable {
         myNFTAddress = _myNFTAddress;
         myNFT = IMyNFT(_myNFTAddress);
         boxPrice = 0.01 ether; // Default price, editable by owner
+        
+        // Validate subscription exists using low-level call for uint256 support
+        (bool success, bytes memory data) = address(COORDINATOR).staticcall(
+            abi.encodeWithSignature("getSubscription(uint256)", _vrfSubscriptionId)
+        );
+        if (success) {
+            (uint96 balance, , address owner, ) = abi.decode(data, (uint96, uint64, address, address[]));
+            require(owner != address(0), "Invalid VRF subscription ID");
+        } else {
+            // Fallback to standard getSubscription if coordinator doesn't support uint256
+            revert("VRF coordinator doesn't support large subscription IDs");
+        }
     }
 
     // Prize Pool Management (This is owner only) 
@@ -106,16 +120,42 @@ contract MysteryBox is UUPSUpgradeable, OwnableUpgradeable {
     function purchaseAndOpenBox() external payable returns (uint256) {
         require(msg.value >= boxPrice, "Insufficient payment");
         require(prizesRemaining > 0, "No prizes left");
+        
+        // Check subscription status before making VRF request (uint256 support)
+        (bool success, bytes memory data) = address(COORDINATOR).staticcall(
+            abi.encodeWithSignature("getSubscription(uint256)", vrfSubscriptionId)
+        );
+        require(success, "Failed to get subscription info");
+        (uint96 balance, , address owner, address[] memory consumers) = abi.decode(data, (uint96, uint64, address, address[]));
+        require(balance > 0, "VRF subscription not funded");
+        require(owner != address(0), "VRF subscription does not exist");
+        
+        // Check if this contract is a consumer (optional but recommended)
+        bool isConsumer = false;
+        for (uint i = 0; i < consumers.length; i++) {
+            if (consumers[i] == address(this)) {
+                isConsumer = true;
+                break;
+            }
+        }
+        require(isConsumer, "Contract not registered as VRF consumer");
+        
         uint256 boxId = _boxId++;
         emit BoxPurchased(msg.sender, boxId);
-        // Request randomness from Chainlink VRF
-        uint256 requestId = COORDINATOR.requestRandomWords(
-            vrfKeyHash,
-            vrfSubscriptionId,
-            vrfRequestConfirmations,
-            vrfCallbackGasLimit,
-            vrfNumWords
+        
+        // Request randomness from Chainlink VRF using low-level call for uint256 support
+        (bool vrfSuccess, bytes memory vrfData) = address(COORDINATOR).call(
+            abi.encodeWithSignature(
+                "requestRandomWords(bytes32,uint256,uint16,uint32,uint32)",
+                vrfKeyHash,
+                vrfSubscriptionId,
+                vrfRequestConfirmations,
+                vrfCallbackGasLimit,
+                vrfNumWords
+            )
         );
+        require(vrfSuccess, "VRF request failed");
+        uint256 requestId = abi.decode(vrfData, (uint256));
         openRequests[requestId] = OpenRequest({user: msg.sender, boxId: boxId});
         return boxId;
     }
@@ -166,6 +206,65 @@ contract MysteryBox is UUPSUpgradeable, OwnableUpgradeable {
     function setMyNFTAddress(address _myNFTAddress) external onlyOwner {
         myNFTAddress = _myNFTAddress;
         myNFT = IMyNFT(_myNFTAddress);
+    }
+
+    //  VRF Subscription Management 
+    function setSubscriptionId(uint256 newSubId) external onlyOwner {
+        // Validate new subscription exists using low-level call for uint256 support
+        (bool success, bytes memory data) = address(COORDINATOR).staticcall(
+            abi.encodeWithSignature("getSubscription(uint256)", newSubId)
+        );
+        require(success, "Failed to get subscription info");
+        (uint96 balance, , address owner, ) = abi.decode(data, (uint96, uint64, address, address[]));
+        require(owner != address(0), "Subscription does not exist");
+        
+        uint256 oldSubId = vrfSubscriptionId;
+        vrfSubscriptionId = newSubId;
+        emit SubscriptionIdUpdated(oldSubId, newSubId);
+    }
+
+    function updateVRFConfig(
+        bytes32 _keyHash,
+        uint32 _callbackGasLimit,
+        uint16 _requestConfirmations
+    ) external onlyOwner {
+        require(_callbackGasLimit >= 20000 && _callbackGasLimit <= 2500000, "Invalid gas limit");
+        require(_requestConfirmations >= 3 && _requestConfirmations <= 200, "Invalid confirmations");
+        
+        vrfKeyHash = _keyHash;
+        vrfCallbackGasLimit = _callbackGasLimit;
+        vrfRequestConfirmations = _requestConfirmations;
+        
+        emit VRFConfigUpdated(_keyHash, _callbackGasLimit, _requestConfirmations);
+    }
+
+    function getSubscriptionInfo() external view returns (
+        uint96 balance,
+        uint64 reqCount,
+        address owner,
+        address[] memory consumers
+    ) {
+        // Use low-level call for uint256 subscription ID support
+        (bool success, bytes memory data) = address(COORDINATOR).staticcall(
+            abi.encodeWithSignature("getSubscription(uint256)", vrfSubscriptionId)
+        );
+        require(success, "Failed to get subscription info");
+        return abi.decode(data, (uint96, uint64, address, address[]));
+    }
+
+    function isConsumerRegistered() external view returns (bool) {
+        (bool success, bytes memory data) = address(COORDINATOR).staticcall(
+            abi.encodeWithSignature("getSubscription(uint256)", vrfSubscriptionId)
+        );
+        if (!success) return false;
+        
+        (, , , address[] memory consumers) = abi.decode(data, (uint96, uint64, address, address[]));
+        for (uint i = 0; i < consumers.length; i++) {
+            if (consumers[i] == address(this)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //  UUPS Authorization 
