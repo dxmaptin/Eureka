@@ -1,0 +1,3408 @@
+{
+  "manifestVersion": "3.2",
+  "proxies": [
+    {
+      "address": "0x519309FCEB58f9F2BF3cD6dC333f364FdDd73EfE",
+      "txHash": "0xec8b1793886482a4c8fa2fb0145ee0ee983fedb8acb493a6b9663e755c77776a",
+      "kind": "uups"
+    },
+    {
+      "address": "0x6a7525573908E24F454e47564a967DFfFC810EFF",
+      "txHash": "0x2edd532fd5fbca3ff7ba23c9a019e79998e3ab98378a669de8511afb239af953",
+      "kind": "uups"
+    },
+    {
+      "address": "0xF5A77DF32c312a5B6194637B0B8A6389784307F2",
+      "txHash": "0x7098e9a1a2cb8a849eb3c6d871d8d5cf96c8746619cc5e0edac8e04a4d1acd9b",
+      "kind": "uups"
+    },
+    {
+      "address": "0xDc90a716a3517e8BBc3d79F7141A9C39664B843B",
+      "txHash": "0x8928e619747102252e83c4702e00c30422b47404e581fc6e085e0e9be2e248c1",
+      "kind": "uups"
+    },
+    {
+      "address": "0x1d157B66476450d46dcd81A656120d9A11521Ac4",
+      "txHash": "0x11b8b20881c3780ab54e666cf20466ab9da3c365ecc020585d2e067eba6f2627",
+      "kind": "uups"
+    },
+    {
+      "address": "0x1a919f34452c834447a006D8FF512C7b3ab74A3a",
+      "txHash": "0x70a0d2a83bb4d137e12abedb64d2b53e31f7d55c053ac638d11aecab9a5c4e4e",
+      "kind": "uups"
+    },
+    {
+      "address": "0x1C2b112A43BEbf289bC2e29A00367685a7f2c086",
+      "txHash": "0x86d8dfc4c259c751a0524edd597d23116195d2505235b1b2cc0725f5e1321118",
+      "kind": "uups"
+    },
+    {
+      "address": "0x0f05C5975e740ECfb2B32630b216B61CcC9ed76e",
+      "txHash": "0x10ec24e56c0f80afcc2fa49d89c4f4b46e931580901c64be91862caeacf57e18",
+      "kind": "uups"
+    },
+    {
+      "address": "0x7146aC7745dDC1a3d5f01450e894b35e45592c8f",
+      "txHash": "0xd4f30183d41bb55c2a314c723e31bc07973a061a6e3a1328cb7d965bc90c14cb",
+      "kind": "uups"
+    }
+  ],
+  "impls": {
+    "51ab1f0d41f51f67794b16ce705f4d893aece0956c8ba30c0800b7d19d55f6e9": {
+      "address": "0x30A6A659445Ac63c0a9B96f59E7b58Ea1d12C780",
+      "txHash": "0x2ec810b0b9a5ceaaa31ea46fa8bee7409e13d1f603f6dd284293d1d98d2cedb9",
+      "layout": {
+        "solcVersion": "0.8.28",
+        "storage": [
+          {
+            "label": "COORDINATOR",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(VRFCoordinatorV2Interface)95",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:19"
+          },
+          {
+            "label": "vrfSubscriptionId",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:20"
+          },
+          {
+            "label": "vrfKeyHash",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_bytes32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:21"
+          },
+          {
+            "label": "vrfCallbackGasLimit",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:22"
+          },
+          {
+            "label": "vrfRequestConfirmations",
+            "offset": 4,
+            "slot": "3",
+            "type": "t_uint16",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:23"
+          },
+          {
+            "label": "vrfNumWords",
+            "offset": 6,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:24"
+          },
+          {
+            "label": "prizeURIs",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_array(t_string_storage)dyn_storage",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:27"
+          },
+          {
+            "label": "isPrizeAvailable",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:29"
+          },
+          {
+            "label": "prizesRemaining",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:31"
+          },
+          {
+            "label": "boxPrice",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:34"
+          },
+          {
+            "label": "myNFTAddress",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_address",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:37"
+          },
+          {
+            "label": "myNFT",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_contract(IMyNFT)9309",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:38"
+          },
+          {
+            "label": "_boxId",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:41"
+          },
+          {
+            "label": "openRequests",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_mapping(t_uint256,t_struct(OpenRequest)9350_storage)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:47"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)160_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)100_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_string_storage)dyn_storage": {
+            "label": "string[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IMyNFT)9309": {
+            "label": "contract IMyNFT",
+            "numberOfBytes": "20"
+          },
+          "t_contract(VRFCoordinatorV2Interface)95": {
+            "label": "contract VRFCoordinatorV2Interface",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(OpenRequest)9350_storage)": {
+            "label": "mapping(uint256 => struct MysteryBox.OpenRequest)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(OpenRequest)9350_storage": {
+            "label": "struct MysteryBox.OpenRequest",
+            "members": [
+              {
+                "label": "user",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "boxId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "0ba1ce20af8a8a11dfe1a7434c7957b08d1d4937dbb07ece563c23f37118f23c": {
+      "address": "0x16e658EdfB6669510c3BCAfA75967f027166382D",
+      "txHash": "0xd5deaf4d85d5db032b72b7627c1cd56c31607d8a115d2b334995ea9e896dc338",
+      "layout": {
+        "solcVersion": "0.8.28",
+        "storage": [
+          {
+            "label": "COORDINATOR",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(VRFCoordinatorV2Interface)95",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:19"
+          },
+          {
+            "label": "vrfSubscriptionId",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:20"
+          },
+          {
+            "label": "vrfKeyHash",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_bytes32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:21"
+          },
+          {
+            "label": "vrfCallbackGasLimit",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:22"
+          },
+          {
+            "label": "vrfRequestConfirmations",
+            "offset": 4,
+            "slot": "3",
+            "type": "t_uint16",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:23"
+          },
+          {
+            "label": "vrfNumWords",
+            "offset": 6,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:24"
+          },
+          {
+            "label": "prizeURIs",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_array(t_string_storage)dyn_storage",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:27"
+          },
+          {
+            "label": "isPrizeAvailable",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:29"
+          },
+          {
+            "label": "prizesRemaining",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:31"
+          },
+          {
+            "label": "boxPrice",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:34"
+          },
+          {
+            "label": "myNFTAddress",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_address",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:37"
+          },
+          {
+            "label": "myNFT",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_contract(IMyNFT)9309",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:38"
+          },
+          {
+            "label": "_boxId",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:41"
+          },
+          {
+            "label": "openRequests",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_mapping(t_uint256,t_struct(OpenRequest)9350_storage)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:47"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)160_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)100_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_string_storage)dyn_storage": {
+            "label": "string[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IMyNFT)9309": {
+            "label": "contract IMyNFT",
+            "numberOfBytes": "20"
+          },
+          "t_contract(VRFCoordinatorV2Interface)95": {
+            "label": "contract VRFCoordinatorV2Interface",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(OpenRequest)9350_storage)": {
+            "label": "mapping(uint256 => struct MysteryBox.OpenRequest)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(OpenRequest)9350_storage": {
+            "label": "struct MysteryBox.OpenRequest",
+            "members": [
+              {
+                "label": "user",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "boxId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "23f75ef14d0634d549cb1bca8db23f8b3af62d86b11ae9420dcf618276c3b5c8": {
+      "address": "0xBC5929009F78d676fFf43E2FD7D59e7195E76bae",
+      "txHash": "0xffa5f6a135b2f5c2bf415e3a0508e3b607ba11b9178a21fcc1c7d36f7fe47d52",
+      "layout": {
+        "solcVersion": "0.8.28",
+        "storage": [
+          {
+            "label": "COORDINATOR",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(VRFCoordinatorV2Interface)95",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:23"
+          },
+          {
+            "label": "vrfSubscriptionId",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:24"
+          },
+          {
+            "label": "vrfKeyHash",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_bytes32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:25"
+          },
+          {
+            "label": "vrfCallbackGasLimit",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:26"
+          },
+          {
+            "label": "vrfRequestConfirmations",
+            "offset": 4,
+            "slot": "3",
+            "type": "t_uint16",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:27"
+          },
+          {
+            "label": "vrfNumWords",
+            "offset": 6,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:28"
+          },
+          {
+            "label": "prizeURIs",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_array(t_string_storage)dyn_storage",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:31"
+          },
+          {
+            "label": "isPrizeAvailable",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:33"
+          },
+          {
+            "label": "prizesRemaining",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:35"
+          },
+          {
+            "label": "boxPrice",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:38"
+          },
+          {
+            "label": "myNFTAddress",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_address",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:41"
+          },
+          {
+            "label": "myNFT",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_contract(IMyNFT)9605",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:42"
+          },
+          {
+            "label": "_boxId",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:45"
+          },
+          {
+            "label": "openRequests",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_mapping(t_uint256,t_struct(OpenRequest)9646_storage)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:51"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)160_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)100_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_string_storage)dyn_storage": {
+            "label": "string[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IMyNFT)9605": {
+            "label": "contract IMyNFT",
+            "numberOfBytes": "20"
+          },
+          "t_contract(VRFCoordinatorV2Interface)95": {
+            "label": "contract VRFCoordinatorV2Interface",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(OpenRequest)9646_storage)": {
+            "label": "mapping(uint256 => struct MysteryBox.OpenRequest)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(OpenRequest)9646_storage": {
+            "label": "struct MysteryBox.OpenRequest",
+            "members": [
+              {
+                "label": "user",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "boxId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "b7f084c23e943763b2ad8a3255bd7c27eb08ae1e7c4945ea21b91a4f21dd1122": {
+      "address": "0x27fD03dB4602bfa8157aE157838DdDcc7C0B19Ee",
+      "txHash": "0xcaa562603538cef14463b5c0094dffbfbe008c278cff9353388979d7ea4034ba",
+      "layout": {
+        "solcVersion": "0.8.28",
+        "storage": [
+          {
+            "label": "COORDINATOR",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(VRFCoordinatorV2Interface)95",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:23"
+          },
+          {
+            "label": "vrfSubscriptionId",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:24"
+          },
+          {
+            "label": "vrfKeyHash",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_bytes32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:25"
+          },
+          {
+            "label": "vrfCallbackGasLimit",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:26"
+          },
+          {
+            "label": "vrfRequestConfirmations",
+            "offset": 4,
+            "slot": "3",
+            "type": "t_uint16",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:27"
+          },
+          {
+            "label": "vrfNumWords",
+            "offset": 6,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:28"
+          },
+          {
+            "label": "prizeURIs",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_array(t_string_storage)dyn_storage",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:31"
+          },
+          {
+            "label": "isPrizeAvailable",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:33"
+          },
+          {
+            "label": "prizesRemaining",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:35"
+          },
+          {
+            "label": "boxPrice",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:38"
+          },
+          {
+            "label": "myNFTAddress",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_address",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:41"
+          },
+          {
+            "label": "myNFT",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_contract(IMyNFT)1727",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:42"
+          },
+          {
+            "label": "_boxId",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:45"
+          },
+          {
+            "label": "openRequests",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_mapping(t_uint256,t_struct(OpenRequest)1768_storage)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:51"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)160_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)100_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_string_storage)dyn_storage": {
+            "label": "string[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IMyNFT)1727": {
+            "label": "contract IMyNFT",
+            "numberOfBytes": "20"
+          },
+          "t_contract(VRFCoordinatorV2Interface)95": {
+            "label": "contract VRFCoordinatorV2Interface",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(OpenRequest)1768_storage)": {
+            "label": "mapping(uint256 => struct MysteryBox.OpenRequest)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(OpenRequest)1768_storage": {
+            "label": "struct MysteryBox.OpenRequest",
+            "members": [
+              {
+                "label": "user",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "boxId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "d1a6ab2572acda170429ede2a851ee67fd8e18633de038cf2b773f0acdf3c193": {
+      "address": "0x49A146DaaB0c37db5CC8E11cD6b294CBDf07EEa2",
+      "txHash": "0xd977956c9e9ca17e4c8c8fffb42eea2355789767c0fa6f520f319900f796e90e",
+      "layout": {
+        "solcVersion": "0.8.28",
+        "storage": [
+          {
+            "label": "COORDINATOR",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(VRFCoordinatorV2Interface)95",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:23"
+          },
+          {
+            "label": "vrfSubscriptionId",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:24"
+          },
+          {
+            "label": "vrfKeyHash",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_bytes32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:25"
+          },
+          {
+            "label": "vrfCallbackGasLimit",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:26"
+          },
+          {
+            "label": "vrfRequestConfirmations",
+            "offset": 4,
+            "slot": "3",
+            "type": "t_uint16",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:27"
+          },
+          {
+            "label": "vrfNumWords",
+            "offset": 6,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:28"
+          },
+          {
+            "label": "prizeURIs",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_array(t_string_storage)dyn_storage",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:31"
+          },
+          {
+            "label": "isPrizeAvailable",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:33"
+          },
+          {
+            "label": "prizesRemaining",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:35"
+          },
+          {
+            "label": "boxPrice",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:38"
+          },
+          {
+            "label": "myNFTAddress",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_address",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:41"
+          },
+          {
+            "label": "myNFT",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_contract(IMyNFT)1727",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:42"
+          },
+          {
+            "label": "_boxId",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:45"
+          },
+          {
+            "label": "openRequests",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_mapping(t_uint256,t_struct(OpenRequest)1768_storage)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:51"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)160_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)100_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_string_storage)dyn_storage": {
+            "label": "string[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IMyNFT)1727": {
+            "label": "contract IMyNFT",
+            "numberOfBytes": "20"
+          },
+          "t_contract(VRFCoordinatorV2Interface)95": {
+            "label": "contract VRFCoordinatorV2Interface",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(OpenRequest)1768_storage)": {
+            "label": "mapping(uint256 => struct MysteryBox.OpenRequest)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(OpenRequest)1768_storage": {
+            "label": "struct MysteryBox.OpenRequest",
+            "members": [
+              {
+                "label": "user",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "boxId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "0cc39ac26adaf2aa77dbc549c0437d856405be380a900e7fb133d4e2218a147a": {
+      "address": "0x9CE81fC55155de6125C7A9E8b6F0C6171d0e929D",
+      "txHash": "0x04dbdb3d53dc896ec6689914c82edc98c36c81c232a0a7019d57ab889876a8c3",
+      "layout": {
+        "solcVersion": "0.8.28",
+        "storage": [
+          {
+            "label": "COORDINATOR",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(VRFCoordinatorV2Interface)95",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:23"
+          },
+          {
+            "label": "vrfSubscriptionId",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:24"
+          },
+          {
+            "label": "vrfKeyHash",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_bytes32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:25"
+          },
+          {
+            "label": "vrfCallbackGasLimit",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:26"
+          },
+          {
+            "label": "vrfRequestConfirmations",
+            "offset": 4,
+            "slot": "3",
+            "type": "t_uint16",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:27"
+          },
+          {
+            "label": "vrfNumWords",
+            "offset": 6,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:28"
+          },
+          {
+            "label": "prizeURIs",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_array(t_string_storage)dyn_storage",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:31"
+          },
+          {
+            "label": "isPrizeAvailable",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:33"
+          },
+          {
+            "label": "prizesRemaining",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:35"
+          },
+          {
+            "label": "boxPrice",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:38"
+          },
+          {
+            "label": "myNFTAddress",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_address",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:41"
+          },
+          {
+            "label": "myNFT",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_contract(IMyNFT)1727",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:42"
+          },
+          {
+            "label": "_boxId",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:45"
+          },
+          {
+            "label": "openRequests",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_mapping(t_uint256,t_struct(OpenRequest)1768_storage)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:51"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)160_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)100_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_string_storage)dyn_storage": {
+            "label": "string[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IMyNFT)1727": {
+            "label": "contract IMyNFT",
+            "numberOfBytes": "20"
+          },
+          "t_contract(VRFCoordinatorV2Interface)95": {
+            "label": "contract VRFCoordinatorV2Interface",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(OpenRequest)1768_storage)": {
+            "label": "mapping(uint256 => struct MysteryBox.OpenRequest)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(OpenRequest)1768_storage": {
+            "label": "struct MysteryBox.OpenRequest",
+            "members": [
+              {
+                "label": "user",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "boxId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "10453f9b9022f53fa6aa15e9bc93a4235b28d61185da650e38a754ae6823c311": {
+      "address": "0xd69349425339c8B7dd9e7f0dbDdf9Ea8c46871fB",
+      "txHash": "0x54cee99bb31f95679807e08af9b55a3c466bdd71a59262787b8a657a21bbc979",
+      "layout": {
+        "solcVersion": "0.8.28",
+        "storage": [
+          {
+            "label": "COORDINATOR",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(IVRFCoordinatorV2Plus)17",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:24"
+          },
+          {
+            "label": "vrfSubscriptionId",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:25"
+          },
+          {
+            "label": "vrfKeyHash",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_bytes32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:26"
+          },
+          {
+            "label": "vrfCallbackGasLimit",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:27"
+          },
+          {
+            "label": "vrfRequestConfirmations",
+            "offset": 4,
+            "slot": "3",
+            "type": "t_uint16",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:28"
+          },
+          {
+            "label": "vrfNumWords",
+            "offset": 6,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:29"
+          },
+          {
+            "label": "prizeURIs",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_array(t_string_storage)dyn_storage",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:32"
+          },
+          {
+            "label": "isPrizeAvailable",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:34"
+          },
+          {
+            "label": "prizesRemaining",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:36"
+          },
+          {
+            "label": "boxPrice",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:39"
+          },
+          {
+            "label": "myNFTAddress",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_address",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:42"
+          },
+          {
+            "label": "myNFT",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_contract(IMyNFT)1781",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:43"
+          },
+          {
+            "label": "_boxId",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:46"
+          },
+          {
+            "label": "openRequests",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_mapping(t_uint256,t_struct(OpenRequest)1822_storage)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:52"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)205_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)145_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_string_storage)dyn_storage": {
+            "label": "string[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IMyNFT)1781": {
+            "label": "contract IMyNFT",
+            "numberOfBytes": "20"
+          },
+          "t_contract(IVRFCoordinatorV2Plus)17": {
+            "label": "contract IVRFCoordinatorV2Plus",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(OpenRequest)1822_storage)": {
+            "label": "mapping(uint256 => struct MysteryBox.OpenRequest)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(OpenRequest)1822_storage": {
+            "label": "struct MysteryBox.OpenRequest",
+            "members": [
+              {
+                "label": "user",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "boxId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "27f7af94cc4cd3f6dee88c585d2e88894634ee57916c2a5801a71b8dc5b6fbfa": {
+      "address": "0x4E4c80144e42d4a975DF8382C0C7c4Ad60dC4B49",
+      "txHash": "0xe384ff3d5fd904de6d1ec1fd75a7730ccff878b336c42a3bba38d687bff3fc3d",
+      "layout": {
+        "solcVersion": "0.8.22",
+        "storage": [
+          {
+            "label": "COORDINATOR",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(IVRFCoordinatorV2Plus)17",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:26"
+          },
+          {
+            "label": "vrfSubscriptionId",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:27"
+          },
+          {
+            "label": "vrfKeyHash",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_bytes32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:28"
+          },
+          {
+            "label": "vrfCallbackGasLimit",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:29"
+          },
+          {
+            "label": "vrfRequestConfirmations",
+            "offset": 4,
+            "slot": "3",
+            "type": "t_uint16",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:30"
+          },
+          {
+            "label": "vrfNumWords",
+            "offset": 6,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:31"
+          },
+          {
+            "label": "prizeURIs",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_array(t_string_storage)dyn_storage",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:34"
+          },
+          {
+            "label": "isPrizeAvailable",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:36"
+          },
+          {
+            "label": "prizesRemaining",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:38"
+          },
+          {
+            "label": "boxPrice",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:41"
+          },
+          {
+            "label": "myNFTAddress",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_address",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:44"
+          },
+          {
+            "label": "myNFT",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_contract(IMyNFT)2072",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:45"
+          },
+          {
+            "label": "_boxId",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:48"
+          },
+          {
+            "label": "openRequests",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_mapping(t_uint256,t_struct(OpenRequest)2117_storage)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:54"
+          },
+          {
+            "label": "lastPurchaseTime",
+            "offset": 0,
+            "slot": "12",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:57"
+          },
+          {
+            "label": "purchaseCooldown",
+            "offset": 0,
+            "slot": "13",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:58"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)205_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)145_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(PausableStorage)356_storage": {
+            "label": "struct PausableUpgradeable.PausableStorage",
+            "members": [
+              {
+                "label": "_paused",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(ReentrancyGuardStorage)420_storage": {
+            "label": "struct ReentrancyGuardUpgradeable.ReentrancyGuardStorage",
+            "members": [
+              {
+                "label": "_status",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_string_storage)dyn_storage": {
+            "label": "string[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IMyNFT)2072": {
+            "label": "contract IMyNFT",
+            "numberOfBytes": "20"
+          },
+          "t_contract(IVRFCoordinatorV2Plus)17": {
+            "label": "contract IVRFCoordinatorV2Plus",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(OpenRequest)2117_storage)": {
+            "label": "mapping(uint256 => struct MysteryBox.OpenRequest)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(OpenRequest)2117_storage": {
+            "label": "struct MysteryBox.OpenRequest",
+            "members": [
+              {
+                "label": "user",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "boxId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.ReentrancyGuard": [
+            {
+              "contract": "ReentrancyGuardUpgradeable",
+              "label": "_status",
+              "type": "t_uint256",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\ReentrancyGuardUpgradeable.sol:43",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Pausable": [
+            {
+              "contract": "PausableUpgradeable",
+              "label": "_paused",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\PausableUpgradeable.sol:21",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "16eb723f17dd913314c474e6801b684745e5ed964504a2b91e2bc37f2ed1f6cc": {
+      "address": "0x473832C355Bf0df666a4ef1fE4FF6BB385b77a27",
+      "txHash": "0x24169f7c70f39469e0c15344888da22a0a71bb7f44c4be72a819cf912f065a31",
+      "layout": {
+        "solcVersion": "0.8.22",
+        "storage": [
+          {
+            "label": "COORDINATOR",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(IVRFCoordinatorV2Plus)17",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:26"
+          },
+          {
+            "label": "vrfSubscriptionId",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:27"
+          },
+          {
+            "label": "vrfKeyHash",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_bytes32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:28"
+          },
+          {
+            "label": "vrfCallbackGasLimit",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:29"
+          },
+          {
+            "label": "vrfRequestConfirmations",
+            "offset": 4,
+            "slot": "3",
+            "type": "t_uint16",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:30"
+          },
+          {
+            "label": "vrfNumWords",
+            "offset": 6,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:31"
+          },
+          {
+            "label": "prizeURIs",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_array(t_string_storage)dyn_storage",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:34"
+          },
+          {
+            "label": "isPrizeAvailable",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:36"
+          },
+          {
+            "label": "prizesRemaining",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:38"
+          },
+          {
+            "label": "boxPrice",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:41"
+          },
+          {
+            "label": "myNFTAddress",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_address",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:44"
+          },
+          {
+            "label": "myNFT",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_contract(IMyNFT)2072",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:45"
+          },
+          {
+            "label": "_boxId",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:48"
+          },
+          {
+            "label": "openRequests",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_mapping(t_uint256,t_struct(OpenRequest)2117_storage)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:54"
+          },
+          {
+            "label": "lastPurchaseTime",
+            "offset": 0,
+            "slot": "12",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:57"
+          },
+          {
+            "label": "purchaseCooldown",
+            "offset": 0,
+            "slot": "13",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:58"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)205_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)145_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(PausableStorage)356_storage": {
+            "label": "struct PausableUpgradeable.PausableStorage",
+            "members": [
+              {
+                "label": "_paused",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(ReentrancyGuardStorage)420_storage": {
+            "label": "struct ReentrancyGuardUpgradeable.ReentrancyGuardStorage",
+            "members": [
+              {
+                "label": "_status",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_string_storage)dyn_storage": {
+            "label": "string[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IMyNFT)2072": {
+            "label": "contract IMyNFT",
+            "numberOfBytes": "20"
+          },
+          "t_contract(IVRFCoordinatorV2Plus)17": {
+            "label": "contract IVRFCoordinatorV2Plus",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(OpenRequest)2117_storage)": {
+            "label": "mapping(uint256 => struct MysteryBox.OpenRequest)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(OpenRequest)2117_storage": {
+            "label": "struct MysteryBox.OpenRequest",
+            "members": [
+              {
+                "label": "user",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "boxId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.ReentrancyGuard": [
+            {
+              "contract": "ReentrancyGuardUpgradeable",
+              "label": "_status",
+              "type": "t_uint256",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\ReentrancyGuardUpgradeable.sol:43",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Pausable": [
+            {
+              "contract": "PausableUpgradeable",
+              "label": "_paused",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\PausableUpgradeable.sol:21",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "4997a2392dda91ae282888a3fb1960b24d49d7eb6eebbff60549258edd835c1d": {
+      "address": "0xC3D6930c0043C19Cf06D1803E6F77BEBE489e8E1",
+      "txHash": "0x85329b1f8dae89aa51c43821c96e23631fc5b25797e02e246b370f9cf7eb9459",
+      "layout": {
+        "solcVersion": "0.8.22",
+        "storage": [
+          {
+            "label": "COORDINATOR",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(IVRFCoordinatorV2Plus)17",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:26"
+          },
+          {
+            "label": "vrfSubscriptionId",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:27"
+          },
+          {
+            "label": "vrfKeyHash",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_bytes32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:28"
+          },
+          {
+            "label": "vrfCallbackGasLimit",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:29"
+          },
+          {
+            "label": "vrfRequestConfirmations",
+            "offset": 4,
+            "slot": "3",
+            "type": "t_uint16",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:30"
+          },
+          {
+            "label": "vrfNumWords",
+            "offset": 6,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:31"
+          },
+          {
+            "label": "prizeURIs",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_array(t_string_storage)dyn_storage",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:34"
+          },
+          {
+            "label": "isPrizeAvailable",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:36"
+          },
+          {
+            "label": "prizesRemaining",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:38"
+          },
+          {
+            "label": "boxPrice",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:41"
+          },
+          {
+            "label": "myNFTAddress",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_address",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:44"
+          },
+          {
+            "label": "myNFT",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_contract(IMyNFT)2072",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:45"
+          },
+          {
+            "label": "_boxId",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:48"
+          },
+          {
+            "label": "openRequests",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_mapping(t_uint256,t_struct(OpenRequest)2117_storage)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:54"
+          },
+          {
+            "label": "lastPurchaseTime",
+            "offset": 0,
+            "slot": "12",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:57"
+          },
+          {
+            "label": "purchaseCooldown",
+            "offset": 0,
+            "slot": "13",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:58"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)205_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)145_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(PausableStorage)356_storage": {
+            "label": "struct PausableUpgradeable.PausableStorage",
+            "members": [
+              {
+                "label": "_paused",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(ReentrancyGuardStorage)420_storage": {
+            "label": "struct ReentrancyGuardUpgradeable.ReentrancyGuardStorage",
+            "members": [
+              {
+                "label": "_status",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_string_storage)dyn_storage": {
+            "label": "string[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IMyNFT)2072": {
+            "label": "contract IMyNFT",
+            "numberOfBytes": "20"
+          },
+          "t_contract(IVRFCoordinatorV2Plus)17": {
+            "label": "contract IVRFCoordinatorV2Plus",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(OpenRequest)2117_storage)": {
+            "label": "mapping(uint256 => struct MysteryBox.OpenRequest)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(OpenRequest)2117_storage": {
+            "label": "struct MysteryBox.OpenRequest",
+            "members": [
+              {
+                "label": "user",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "boxId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.ReentrancyGuard": [
+            {
+              "contract": "ReentrancyGuardUpgradeable",
+              "label": "_status",
+              "type": "t_uint256",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\ReentrancyGuardUpgradeable.sol:43",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Pausable": [
+            {
+              "contract": "PausableUpgradeable",
+              "label": "_paused",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\PausableUpgradeable.sol:21",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "fd56a384aac57c652b359397b2e602f8df86773a275512f77251b3d610852063": {
+      "address": "0x10570dCF6bE4B64fF9f78Df6dE943a1DBeeFffB7",
+      "txHash": "0xd44d2b4eef3ee7965a3655a300931c1befa76358a59ac8c3797851269c2e244c",
+      "layout": {
+        "solcVersion": "0.8.22",
+        "storage": [
+          {
+            "label": "COORDINATOR",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(IVRFCoordinatorV2Plus)17",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:26"
+          },
+          {
+            "label": "vrfSubscriptionId",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:27"
+          },
+          {
+            "label": "vrfKeyHash",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_bytes32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:28"
+          },
+          {
+            "label": "vrfCallbackGasLimit",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:29"
+          },
+          {
+            "label": "vrfRequestConfirmations",
+            "offset": 4,
+            "slot": "3",
+            "type": "t_uint16",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:30"
+          },
+          {
+            "label": "vrfNumWords",
+            "offset": 6,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:31"
+          },
+          {
+            "label": "prizeURIs",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_array(t_string_storage)dyn_storage",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:34"
+          },
+          {
+            "label": "isPrizeAvailable",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:36"
+          },
+          {
+            "label": "prizesRemaining",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:38"
+          },
+          {
+            "label": "boxPrice",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:41"
+          },
+          {
+            "label": "myNFTAddress",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_address",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:44"
+          },
+          {
+            "label": "myNFT",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_contract(IMyNFT)2072",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:45"
+          },
+          {
+            "label": "_boxId",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:48"
+          },
+          {
+            "label": "openRequests",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_mapping(t_uint256,t_struct(OpenRequest)2117_storage)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:54"
+          },
+          {
+            "label": "lastPurchaseTime",
+            "offset": 0,
+            "slot": "12",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:57"
+          },
+          {
+            "label": "purchaseCooldown",
+            "offset": 0,
+            "slot": "13",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:58"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)205_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)145_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(PausableStorage)356_storage": {
+            "label": "struct PausableUpgradeable.PausableStorage",
+            "members": [
+              {
+                "label": "_paused",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(ReentrancyGuardStorage)420_storage": {
+            "label": "struct ReentrancyGuardUpgradeable.ReentrancyGuardStorage",
+            "members": [
+              {
+                "label": "_status",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_string_storage)dyn_storage": {
+            "label": "string[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IMyNFT)2072": {
+            "label": "contract IMyNFT",
+            "numberOfBytes": "20"
+          },
+          "t_contract(IVRFCoordinatorV2Plus)17": {
+            "label": "contract IVRFCoordinatorV2Plus",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(OpenRequest)2117_storage)": {
+            "label": "mapping(uint256 => struct MysteryBox.OpenRequest)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(OpenRequest)2117_storage": {
+            "label": "struct MysteryBox.OpenRequest",
+            "members": [
+              {
+                "label": "user",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "boxId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.ReentrancyGuard": [
+            {
+              "contract": "ReentrancyGuardUpgradeable",
+              "label": "_status",
+              "type": "t_uint256",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\ReentrancyGuardUpgradeable.sol:43",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Pausable": [
+            {
+              "contract": "PausableUpgradeable",
+              "label": "_paused",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\PausableUpgradeable.sol:21",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "7c222071eb3208164d09772562f18d8b534297e00bf2fa1a0e84f02513053621": {
+      "address": "0xb4bfFE24C23143b61DF63B206CF5Ad7f99343b2c",
+      "txHash": "0xb0cc5d3976a078de293f464993df7bd76a9b5c49ccb2e0135db524f7ea89f255",
+      "layout": {
+        "solcVersion": "0.8.22",
+        "storage": [
+          {
+            "label": "COORDINATOR",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(IVRFCoordinatorV2Plus)380",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:26"
+          },
+          {
+            "label": "vrfSubscriptionId",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:27"
+          },
+          {
+            "label": "vrfKeyHash",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_bytes32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:28"
+          },
+          {
+            "label": "vrfCallbackGasLimit",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:29"
+          },
+          {
+            "label": "vrfRequestConfirmations",
+            "offset": 4,
+            "slot": "3",
+            "type": "t_uint16",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:30"
+          },
+          {
+            "label": "vrfNumWords",
+            "offset": 6,
+            "slot": "3",
+            "type": "t_uint32",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:31"
+          },
+          {
+            "label": "prizeURIs",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_array(t_string_storage)dyn_storage",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:34"
+          },
+          {
+            "label": "isPrizeAvailable",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:36"
+          },
+          {
+            "label": "prizesRemaining",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:38"
+          },
+          {
+            "label": "boxPrice",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:41"
+          },
+          {
+            "label": "myNFTAddress",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_address",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:44"
+          },
+          {
+            "label": "myNFT",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_contract(IMyNFT)2449",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:45"
+          },
+          {
+            "label": "_boxId",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:48"
+          },
+          {
+            "label": "openRequests",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_mapping(t_uint256,t_struct(OpenRequest)2494_storage)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:54"
+          },
+          {
+            "label": "lastPurchaseTime",
+            "offset": 0,
+            "slot": "12",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:57"
+          },
+          {
+            "label": "purchaseCooldown",
+            "offset": 0,
+            "slot": "13",
+            "type": "t_uint256",
+            "contract": "MysteryBox",
+            "src": "contracts\\MysteryBox.sol:58"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)331_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)271_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(PausableStorage)482_storage": {
+            "label": "struct PausableUpgradeable.PausableStorage",
+            "members": [
+              {
+                "label": "_paused",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(ReentrancyGuardStorage)546_storage": {
+            "label": "struct ReentrancyGuardUpgradeable.ReentrancyGuardStorage",
+            "members": [
+              {
+                "label": "_status",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_string_storage)dyn_storage": {
+            "label": "string[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IMyNFT)2449": {
+            "label": "contract IMyNFT",
+            "numberOfBytes": "20"
+          },
+          "t_contract(IVRFCoordinatorV2Plus)380": {
+            "label": "contract IVRFCoordinatorV2Plus",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(OpenRequest)2494_storage)": {
+            "label": "mapping(uint256 => struct MysteryBox.OpenRequest)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(OpenRequest)2494_storage": {
+            "label": "struct MysteryBox.OpenRequest",
+            "members": [
+              {
+                "label": "user",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "boxId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.ReentrancyGuard": [
+            {
+              "contract": "ReentrancyGuardUpgradeable",
+              "label": "_status",
+              "type": "t_uint256",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\ReentrancyGuardUpgradeable.sol:43",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Pausable": [
+            {
+              "contract": "PausableUpgradeable",
+              "label": "_paused",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\utils\\PausableUpgradeable.sol:21",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
