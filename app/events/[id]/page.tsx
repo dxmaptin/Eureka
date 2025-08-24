@@ -55,6 +55,8 @@ export default function EventPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
+      {/* Invisible navbar spacer */}
+      <div className="h-24 w-full"></div>
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Event Details - Left Column */}
@@ -132,7 +134,7 @@ export default function EventPage({ params }: { params: { id: string } }) {
 
           {/* Purchase Card - Right Column */}
           <div>
-            <Card className="bg-slate-800 border-slate-700 sticky top-20">
+            <Card className="bg-slate-800 border-slate-700 sticky top-28">
               <CardContent className="p-6">
                 <div className="text-2xl font-bold text-white mb-2">
                   <Price usd={event.priceUsd} eth={event.priceEth} />
