@@ -1,4 +1,5 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("@openzeppelin/hardhat-upgrades");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -6,7 +7,7 @@ module.exports = {
   networks: {
     sepolia: {
       url: "https://ethereum-sepolia-rpc.publicnode.com", // or Alchemy URL
-      accounts: ["757d30a33ecb2bcb4647f68fbff0e846f5a19fb4a05a5c60b99895d38d801a7b"]
+      accounts: ["af2feac8b28e1bae4a57ee54d32611c42b14bbbbda18572ed1bf3307848da517"]
     }
   }
 };

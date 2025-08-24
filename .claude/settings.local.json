@@ -4,7 +4,13 @@
       "Bash(git commit:*)",
       "Bash(git fetch:*)",
       "Bash(git merge:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "WebFetch(domain:vrf.chain.link)",
+      "WebSearch",
+      "Bash(npx hardhat run:*)",
+      "WebFetch(domain:docs.chain.link)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ],
     "deny": [],
     "ask": []

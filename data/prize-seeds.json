@@ -1,0 +1,23 @@
+{
+  "name": "Event Ticket Mystery Box - Seed Data",
+  "description": "Simple test prizes using verified IPFS metadata",
+  "totalWeight": 100,
+  "prizes": [
+    {
+      "id": 1,
+      "uri": "ipfs://QmNLei78zWmzUdbeRB3CiUfAizWUrbeeZh5K1rhAQKCh51",
+      "rarity": "legendary",
+      "weight": 50,
+      "description": "Mystery Box Prize",
+      "category": "standard"
+    },
+    {
+      "id": 2,
+      "uri": "ipfs://QmNLei78zWmzUdbeRB3CiUfAizWUrbeeZh5K1rhAQKCh51",
+      "rarity": "common",
+      "weight": 50,
+      "description": "Mystery Box Prize",
+      "category": "standard"
+    }
+  ]
+}
