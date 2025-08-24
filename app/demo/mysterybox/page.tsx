@@ -13,7 +13,7 @@ import { toast } from "sonner";
 export default function MysteryBoxDemoPage() {
   const { isConnected, address, connect } = useWallet();
   const [contractAddress, setContractAddress] = useState<string>(
-    process.env.NEXT_PUBLIC_MYSTERYBOX_ADDRESS ?? "0x0ECf483696ED9Fa3c8396DbA563b2CefE37b5FFB"
+    process.env.NEXT_PUBLIC_MYSTERYBOX_ADDRESS ?? "0x4AaC7FfF9e35C72d17ad9a45b87DaB2F64fA9FDE"
   );
   const [boxPriceWei, setBoxPriceWei] = useState<bigint | null>(null);
   const [prizesRemaining, setPrizesRemaining] = useState<bigint | null>(null);
@@ -29,6 +29,34 @@ export default function MysteryBoxDemoPage() {
     uri: string;
   } | null>(null);
   const [availablePrizes, setAvailablePrizes] = useState<string[]>([]);
+
+  // Auto-import NFT to MetaMask
+  const addNFTToMetaMask = async (tokenId: string) => {
+    if (!window.ethereum) {
+      toast.error("MetaMask not found");
+      return;
+    }
+
+    try {
+      const contractAddress = process.env.NEXT_PUBLIC_MYNFT_ADDRESS || "0x791c1B4A7aAfB6Cf1EDcC2404dd58d93080dc2E3";
+      
+      await window.ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC721',
+          options: {
+            address: contractAddress,
+            tokenId: tokenId,
+          },
+        },
+      });
+      
+      toast.success("NFT added to MetaMask", { description: `Token #${tokenId}` });
+    } catch (error: any) {
+      console.error("Failed to add NFT to MetaMask:", error);
+      toast.error("Failed to add NFT", { description: error.message });
+    }
+  };
 
   const contract = useMemo<ethers.Contract | null>(() => {
     try {
@@ -89,11 +117,20 @@ export default function MysteryBoxDemoPage() {
     };
   }, [contract]);
 
-  // Listen to events for live feedback
+  // Listen to events for live feedback - filtered by connected user
   useEffect(() => {
-    if (!contract) return;
+    if (!contract || !address) return;
 
     const onPurchased = (user: string, emittedBoxId: ethers.BigNumberish) => {
+      console.log("BoxPurchased event received:", { user, emittedBoxId, connectedUser: address });
+      
+      // Only process events for the connected user
+      if (user.toLowerCase() !== address.toLowerCase()) {
+        console.log("Ignoring BoxPurchased event - not for connected user");
+        return;
+      }
+      
+      console.log("Processing BoxPurchased event for connected user");
       setBoxId(ethers.toNumber(emittedBoxId).toString());
       toast.message("Box purchased", { description: `Box ID ${emittedBoxId}` });
     };
@@ -104,6 +141,15 @@ export default function MysteryBoxDemoPage() {
       tokenId: ethers.BigNumberish,
       uri: string
     ) => {
+      console.log("BoxOpened event received:", { user, emittedBoxId, tokenId, uri, connectedUser: address });
+      
+      // Only process events for the connected user
+      if (user.toLowerCase() !== address.toLowerCase()) {
+        console.log("Ignoring BoxOpened event - not for connected user");
+        return;
+      }
+      
+      console.log("Processing BoxOpened event for connected user - YOU GOT YOUR PRIZE!");
       setResult({
         user,
         boxId: ethers.toNumber(emittedBoxId).toString(),
@@ -124,7 +170,7 @@ export default function MysteryBoxDemoPage() {
       contract.off("BoxPurchased", onPurchased);
       contract.off("BoxOpened", onOpened);
     };
-  }, [contract]);
+  }, [contract, address]);
 
   const handleBuyOpen = async () => {
     if (!isConnected) {
@@ -175,8 +221,12 @@ export default function MysteryBoxDemoPage() {
       }
       // Inform user we are awaiting VRF fulfillment (real VRF on Sepolia can take time)
       toast.message("Awaiting VRF fulfillment", {
-        description: "This may take a moment on testnets.",
+        description: "This may take a moment on testnets. Listening for your prize...",
       });
+      
+      // Log for debugging
+      console.log("VRF request sent. Waiting for BoxOpened event for user:", address);
+      console.log("Current prizes remaining:", prizesRemaining?.toString());
     } catch (e: any) {
       console.error(e);
       toast.error("Buy & Open failed", { description: e?.shortMessage || e?.message });
@@ -306,10 +356,18 @@ export default function MysteryBoxDemoPage() {
 
                 <div className="border-t pt-3 bg-blue-50 -mx-4 -mb-4 px-4 pb-4 rounded-b">
                   <div className="text-sm font-medium text-blue-800 mb-2">Add to MetaMask:</div>
-                  <div className="text-xs space-y-1 text-blue-700">
+                  <div className="text-xs space-y-1 text-blue-700 mb-3">
                     <div><span className="font-medium">Contract:</span> {process.env.NEXT_PUBLIC_MYNFT_ADDRESS || "0x791c1B4A7aAfB6Cf1EDcC2404dd58d93080dc2E3"}</div>
                     <div><span className="font-medium">Token ID:</span> {result.tokenId}</div>
                   </div>
+                  <Button 
+                    onClick={() => addNFTToMetaMask(result.tokenId)}
+                    variant="outline" 
+                    size="sm"
+                    className="w-full"
+                  >
+                    Import NFT to MetaMask
+                  </Button>
                 </div>
               </CardContent>
             </Card>

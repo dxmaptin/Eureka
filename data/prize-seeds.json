@@ -1,94 +1,22 @@
 {
   "name": "Event Ticket Mystery Box - Seed Data",
-  "description": "Tiered rarity system for event tickets with realistic weights",
+  "description": "Simple test prizes using verified IPFS metadata",
   "totalWeight": 100,
   "prizes": [
     {
       "id": 1,
-      "uri": "ipfs://QmLegendary1/VIP-backstage-pass.json",
+      "uri": "ipfs://QmNLei78zWmzUdbeRB3CiUfAizWUrbeeZh5K1rhAQKCh51",
       "rarity": "legendary",
-      "weight": 1,
-      "description": "VIP Backstage Pass + Meet & Greet",
-      "category": "premium"
+      "weight": 50,
+      "description": "Mystery Box Prize",
+      "category": "standard"
     },
     {
       "id": 2,
-      "uri": "ipfs://QmLegendary2/artist-private-dinner.json", 
-      "rarity": "legendary",
-      "weight": 1,
-      "description": "Private Dinner with Artist",
-      "category": "premium"
-    },
-    {
-      "id": 3,
-      "uri": "ipfs://QmEpic1/front-row-center.json",
-      "rarity": "epic", 
-      "weight": 3,
-      "description": "Front Row Center Seat",
-      "category": "premium"
-    },
-    {
-      "id": 4,
-      "uri": "ipfs://QmEpic2/vip-lounge-access.json",
-      "rarity": "epic",
-      "weight": 3,
-      "description": "VIP Lounge Access + Premium Bar",
-      "category": "premium"
-    },
-    {
-      "id": 5,
-      "uri": "ipfs://QmEpic3/soundcheck-access.json",
-      "rarity": "epic", 
-      "weight": 4,
-      "description": "Exclusive Soundcheck Access",
-      "category": "premium"
-    },
-    {
-      "id": 6,
-      "uri": "ipfs://QmRare1/premium-seating-section-a.json",
-      "rarity": "rare",
-      "weight": 8,
-      "description": "Premium Seating - Section A",
-      "category": "standard"
-    },
-    {
-      "id": 7,
-      "uri": "ipfs://QmRare2/premium-seating-section-b.json",
-      "rarity": "rare",
-      "weight": 8,
-      "description": "Premium Seating - Section B", 
-      "category": "standard"
-    },
-    {
-      "id": 8,
-      "uri": "ipfs://QmRare3/fast-track-entry.json",
-      "rarity": "rare",
-      "weight": 7,
-      "description": "Fast Track Entry + Merchandise Credit",
-      "category": "standard"
-    },
-    {
-      "id": 9,
-      "uri": "ipfs://QmCommon1/general-admission-floor.json",
+      "uri": "ipfs://QmNLei78zWmzUdbeRB3CiUfAizWUrbeeZh5K1rhAQKCh51",
       "rarity": "common",
-      "weight": 25,
-      "description": "General Admission - Floor Standing",
-      "category": "standard"
-    },
-    {
-      "id": 10,
-      "uri": "ipfs://QmCommon2/general-admission-balcony.json",
-      "rarity": "common", 
-      "weight": 25,
-      "description": "General Admission - Balcony Seating",
-      "category": "standard"
-    },
-    {
-      "id": 11,
-      "uri": "ipfs://QmCommon3/standard-seating.json",
-      "rarity": "common",
-      "weight": 15,
-      "description": "Standard Reserved Seating",
+      "weight": 50,
+      "description": "Mystery Box Prize",
       "category": "standard"
     }
   ]
