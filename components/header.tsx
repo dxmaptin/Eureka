@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export default function Header() {
-  const { isConnected, address, disconnect } = useWallet()
+  const { isConnected, address, disconnect, walletType, user, loginMethod, isCustodial } = useWallet()
   const [showConnectModal, setShowConnectModal] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -25,6 +25,20 @@ export default function Header() {
 
   const truncateAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`
+  }
+
+  const getDisplayName = () => {
+    if (walletType === 'magic' && user) {
+      if (user.email) return user.email
+      if (user.phoneNumber) return user.phoneNumber
+      if (user.oauthProvider) return `${user.oauthProvider} user`
+    }
+    return truncateAddress(address)
+  }
+
+  const getAccountType = () => {
+    if (isCustodial) return "Custodial Account"
+    return "Web3 Wallet"
   }
 
   useEffect(() => {
@@ -116,11 +130,16 @@ export default function Header() {
                   className="bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
                 >
                   <User className="mr-2 h-4 w-4" />
-                  {truncateAddress(address)}
+                  {getDisplayName()}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  <div>
+                    <div>My Account</div>
+                    <div className="text-xs font-normal text-slate-500">{getAccountType()}</div>
+                  </div>
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/dashboard">My Tickets</Link>
@@ -138,7 +157,7 @@ export default function Header() {
               className="bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
               size={scrolled ? "sm" : "default"}
             >
-              Connect Wallet
+              Get Started
             </Button>
           )}
         </div>

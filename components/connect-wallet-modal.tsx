@@ -1,11 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useWallet } from "@/context/wallet-context"
-import { Loader2 } from "lucide-react"
+import { Wallet, Mail, Phone, Chrome, Twitter, Loader2 } from "lucide-react"
 
 interface ConnectWalletModalProps {
   isOpen: boolean
@@ -13,110 +16,206 @@ interface ConnectWalletModalProps {
 }
 
 export function ConnectWalletModal({ isOpen, onClose }: ConnectWalletModalProps) {
-  const { connect } = useWallet()
-  const [isConnecting, setIsConnecting] = useState(false)
-  const [activeTab, setActiveTab] = useState("crypto")
+  const { connect, connectWithEmail, connectWithPhone, connectWithSocial } = useWallet()
+  const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleConnect = async (walletType: string) => {
-    setIsConnecting(true)
-
+  const handleMetaMaskConnect = async () => {
+    setIsLoading(true)
     try {
-      await connect(walletType)
-      setIsConnecting(false)
+      await connect("metamask")
       onClose()
     } catch (error) {
-      console.error("Connection failed:", error)
-      setIsConnecting(false)
+      console.error("MetaMask connection failed:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleEmailConnect = async () => {
+    if (!email.trim()) return
+    
+    setIsLoading(true)
+    try {
+      await connectWithEmail(email)
+      onClose()
+    } catch (error) {
+      console.error("Email login failed:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handlePhoneConnect = async () => {
+    if (!phone.trim()) return
+    
+    setIsLoading(true)
+    try {
+      await connectWithPhone(phone)
+      onClose()
+    } catch (error) {
+      console.error("Phone login failed:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleSocialConnect = async (provider: string) => {
+    setIsLoading(true)
+    try {
+      await connectWithSocial(provider)
+      onClose()
+    } catch (error) {
+      console.error(`${provider} login failed:`, error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-slate-800 border-slate-700">
         <DialogHeader>
-          <DialogTitle className="text-center text-xl">Connect Your Wallet</DialogTitle>
+          <DialogTitle className="text-white">Connect to Eureka</DialogTitle>
+          <DialogDescription className="text-slate-300">
+            Connect your wallet or sign in with email to purchase tickets
+          </DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue="crypto" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="crypto">Crypto Wallet</TabsTrigger>
-            <TabsTrigger value="fiat">Credit Card</TabsTrigger>
+        <Tabs defaultValue="wallet" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 bg-slate-700">
+            <TabsTrigger value="wallet" className="text-slate-300 data-[state=active]:text-white">
+              <Wallet className="w-4 h-4 mr-2" />
+              Wallet
+            </TabsTrigger>
+            <TabsTrigger value="email" className="text-slate-300 data-[state=active]:text-white">
+              <Mail className="w-4 h-4 mr-2" />
+              Email
+            </TabsTrigger>
+            <TabsTrigger value="social" className="text-slate-300 data-[state=active]:text-white">
+              <Phone className="w-4 h-4 mr-2" />
+              Social
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="crypto" className="mt-4 space-y-4">
+          <TabsContent value="wallet" className="space-y-4">
+            <div className="text-sm text-slate-400 text-center">
+              Connect with your crypto wallet
+            </div>
             <Button
-              variant="outline"
-              className="w-full justify-between h-14 px-4"
-              onClick={() => handleConnect("metamask")}
-              disabled={isConnecting}
+              onClick={handleMetaMaskConnect}
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 text-white hover:from-orange-600 hover:to-yellow-600"
             >
-              <span className="flex items-center">
-                <img src="/placeholder.svg?height=32&width=32" alt="MetaMask" className="h-8 w-8 mr-2" />
-                MetaMask
-              </span>
-              {isConnecting && <Loader2 className="h-4 w-4 animate-spin" />}
+              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wallet className="mr-2 h-4 w-4" />}
+              {isLoading ? "Connecting..." : "Connect MetaMask"}
             </Button>
-
-            <Button
-              variant="outline"
-              className="w-full justify-between h-14 px-4"
-              onClick={() => handleConnect("coinbase")}
-              disabled={isConnecting}
-            >
-              <span className="flex items-center">
-                <img src="/placeholder.svg?height=32&width=32" alt="Coinbase Wallet" className="h-8 w-8 mr-2" />
-                Coinbase Wallet
-              </span>
-              {isConnecting && <Loader2 className="h-4 w-4 animate-spin" />}
-            </Button>
-
-            <Button
-              variant="outline"
-              className="w-full justify-between h-14 px-4"
-              onClick={() => handleConnect("walletconnect")}
-              disabled={isConnecting}
-            >
-              <span className="flex items-center">
-                <img src="/placeholder.svg?height=32&width=32" alt="WalletConnect" className="h-8 w-8 mr-2" />
-                WalletConnect
-              </span>
-              {isConnecting && <Loader2 className="h-4 w-4 animate-spin" />}
-            </Button>
+            <div className="text-xs text-slate-500 text-center">
+              You control your wallet and pay gas fees
+            </div>
           </TabsContent>
 
-          <TabsContent value="fiat" className="mt-4 space-y-4">
-            <div className="space-y-4 border rounded-lg p-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Card Number</label>
-                <input
-                  type="text"
-                  placeholder="1234 5678 9012 3456"
-                  className="w-full p-2 rounded-md border bg-transparent"
-                />
-              </div>
+          <TabsContent value="email" className="space-y-4">
+            <div className="text-sm text-slate-400 text-center">
+              Sign in with your email - no wallet required
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-slate-300">
+                Email Address
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
+                onKeyDown={(e) => e.key === "Enter" && handleEmailConnect()}
+              />
+            </div>
+            <Button
+              onClick={handleEmailConnect}
+              disabled={isLoading || !email.trim()}
+              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
+            >
+              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
+              {isLoading ? "Signing in..." : "Sign in with Email"}
+            </Button>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Expiry Date</label>
-                  <input type="text" placeholder="MM/YY" className="w-full p-2 rounded-md border bg-transparent" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">CVC</label>
-                  <input type="text" placeholder="123" className="w-full p-2 rounded-md border bg-transparent" />
-                </div>
-              </div>
+            <Separator className="bg-slate-600" />
 
+            <div className="space-y-2">
+              <Label htmlFor="phone" className="text-slate-300">
+                Phone Number
+              </Label>
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="+1 (555) 123-4567"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
+                onKeyDown={(e) => e.key === "Enter" && handlePhoneConnect()}
+              />
+            </div>
+            <Button
+              onClick={handlePhoneConnect}
+              disabled={isLoading || !phone.trim()}
+              variant="outline"
+              className="w-full border-slate-600 text-slate-300 hover:bg-slate-700"
+            >
+              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Phone className="mr-2 h-4 w-4" />}
+              {isLoading ? "Signing in..." : "Sign in with Phone"}
+            </Button>
+
+            <div className="text-xs text-slate-500 text-center">
+              We manage your wallet and cover gas fees
+            </div>
+          </TabsContent>
+
+          <TabsContent value="social" className="space-y-4">
+            <div className="text-sm text-slate-400 text-center">
+              Connect with your social accounts
+            </div>
+            <div className="space-y-3">
               <Button
-                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
-                onClick={() => handleConnect("credit")}
-                disabled={isConnecting}
+                onClick={() => handleSocialConnect("google")}
+                disabled={isLoading}
+                variant="outline"
+                className="w-full border-slate-600 text-slate-300 hover:bg-slate-700"
               >
-                {isConnecting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                Connect with Credit Card
+                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Chrome className="mr-2 h-4 w-4" />}
+                Continue with Google
               </Button>
+              <Button
+                onClick={() => handleSocialConnect("twitter")}
+                disabled={isLoading}
+                variant="outline"
+                className="w-full border-slate-600 text-slate-300 hover:bg-slate-700"
+              >
+                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Twitter className="mr-2 h-4 w-4" />}
+                Continue with Twitter
+              </Button>
+              <Button
+                onClick={() => handleSocialConnect("discord")}
+                disabled={isLoading}
+                variant="outline"
+                className="w-full border-slate-600 text-slate-300 hover:bg-slate-700"
+              >
+                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <div className="mr-2 h-4 w-4 bg-indigo-500 rounded-sm" />}
+                Continue with Discord
+              </Button>
+            </div>
+            <div className="text-xs text-slate-500 text-center">
+              Quick signup with your existing accounts
             </div>
           </TabsContent>
         </Tabs>
+
+        <div className="text-xs text-slate-500 text-center pt-2">
+          By connecting, you agree to our Terms of Service and Privacy Policy
+        </div>
       </DialogContent>
     </Dialog>
   )
