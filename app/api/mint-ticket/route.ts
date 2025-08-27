@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 import { NextRequest, NextResponse } from 'next/server'
 import MyNFTAbi from '@/artifacts/contracts/MyNFT.sol/MyNFT.json'
+import { DatabaseService } from '@/lib/database'
 
 const RELAYER_PRIVATE_KEY = process.env.RELAYER_PRIVATE_KEY
 const RELAYER_ADDRESS = process.env.RELAYER_ADDRESS
@@ -133,11 +134,46 @@ export async function POST(request: NextRequest): Promise<NextResponse<MintRespo
 
     console.log('🎨 NFT minted with token ID:', tokenId)
 
+    // Create/update user in database
+    console.log('👤 Creating/updating user in database...')
+    const dbUser = await DatabaseService.createOrUpdateUser({
+      wallet_address: userAddress,
+      login_method: paymentMethod === 'crypto' ? 'metamask' : 'magic_email' // Simplified assumption
+    })
+
+    if (!dbUser) {
+      console.error('❌ Failed to create user record, cannot create ticket')
+      return NextResponse.json({
+        success: false,
+        error: 'Failed to create user record'
+      }, { status: 500 })
+    }
+
+    // Save ticket to database
+    console.log('🎫 Saving ticket to database...')
+    const ticketData = await DatabaseService.createTicket({
+      event_id: eventId,
+      owner_id: dbUser.id,
+      token_id: parseInt(tokenId || '0'),
+      transaction_hash: tx.hash,
+      payment_method: paymentMethod,
+      metadata_uri: METADATA_URI
+    })
+
+    if (!ticketData) {
+      console.warn('⚠️ Failed to save ticket to database, but NFT was minted')
+    } else {
+      console.log('✅ Ticket saved to database:', ticketData.id)
+    }
+
     return NextResponse.json({
       success: true,
       transactionHash: tx.hash,
+      tokenId: tokenId,
       estimatedGasCost: estimatedCostEth,
-      relayerBalance: relayerBalanceEth
+      relayerBalance: relayerBalanceEth,
+      ticket: ticketData,
+      user: dbUser
     })
 
   } catch (error) {

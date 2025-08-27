@@ -12,8 +12,9 @@ import { ethers } from "ethers"
 import MyNFTAbi from "@/artifacts/contracts/MyNFT.sol/MyNFT.json"
 import { Price } from "@/components/price"
 import { CreditCardForm, CreditCardData } from "@/components/credit-card-form"
+import type { Event } from "@/lib/supabase"
 
-export default function PurchasePage({ params }: { params: { id: string } }) {
+export default function PurchasePage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { isConnected, address } = useWallet()
@@ -27,9 +28,9 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
   const [creditCardData, setCreditCardData] = useState<CreditCardData>()
   const [errorMessage, setErrorMessage] = useState("")
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
+  const [event, setEvent] = useState<Event | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  // Find event by ID (in a real app, this would be fetched from an API)
-  const event = events.find((e) => e.id === params.id)
   const feeUsd = 6
   const feeEth = 0.002
 
@@ -43,17 +44,57 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
   }, [timeoutId])
 
   useEffect(() => {
-    // Get quantity from URL params
-    const quantityParam = searchParams.get("quantity")
-    if (quantityParam) {
-      setQuantity(Number.parseInt(quantityParam))
+    const fetchEvent = async () => {
+      try {
+        const { id } = await params
+        console.log('🎫 Fetching event for purchase:', id)
+        const response = await fetch(`/api/events/${id}`)
+        const data = await response.json()
+        
+        if (data.success) {
+          setEvent(data.event)
+          console.log('✅ Event loaded for purchase:', data.event.name)
+        } else {
+          console.error('❌ Event not found:', data.error)
+          router.push('/')
+        }
+      } catch (err) {
+        console.error('❌ Error fetching event for purchase:', err)
+        router.push('/')
+      } finally {
+        setLoading(false)
+      }
     }
+    
+    const initializePage = async () => {
+      await fetchEvent()
+      
+      // Get quantity from URL params
+      const quantityParam = searchParams.get("quantity")
+      if (quantityParam) {
+        setQuantity(Number.parseInt(quantityParam))
+      }
 
-    // Redirect if not connected
-    if (!isConnected) {
-      router.push(`/events/${params.id}`)
+      // Redirect if not connected
+      if (!isConnected) {
+        const { id } = await params
+        router.push(`/events/${id}`)
+      }
     }
-  }, [isConnected, params.id, router, searchParams])
+    
+    initializePage()
+  }, [isConnected, router, searchParams, params])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 flex items-center justify-center">
+        <div className="flex items-center space-x-2 text-white">
+          <Loader2 className="h-6 w-6 animate-spin" />
+          <span>Loading event...</span>
+        </div>
+      </div>
+    )
+  }
 
   if (!event) {
     return <div className="container mx-auto px-4 py-8 text-center">Event not found!</div>
@@ -100,14 +141,9 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
       if (activeTab === "fiat") {
         console.log('💳 Credit card payment simulation')
         // Simulate credit card processing (longer delay for realism)
-        await new Promise((resolve, reject) => {
+        await new Promise((resolve) => {
           setTimeout(() => {
-            // Simulate random payment failures for demo
-            if (Math.random() < 0.2) { // 20% chance of payment failure
-              reject(new Error("Credit card payment declined. Please check your card details or try a different payment method."))
-            } else {
-              resolve(true)
-            }
+            resolve(true)
           }, 2000)
         })
       } else {
@@ -122,6 +158,7 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
       // Use relayer API for both crypto and fiat payments
       console.log('🔗 Using relayer API for minting (gas-free for user)')
       
+      const { id } = await params
       const mintResponse = await fetch('/api/mint-ticket', {
         method: 'POST',
         headers: {
@@ -130,7 +167,7 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
         body: JSON.stringify({
           userAddress: address,
           paymentMethod: activeTab,
-          eventId: params.id,
+          eventId: id,
           quantity: quantity
         })
       })
@@ -186,8 +223,9 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
     }
   }
 
-  const handleBack = () => {
-    router.push(`/events/${params.id}`)
+  const handleBack = async () => {
+    const { id } = await params
+    router.push(`/events/${id}`)
   }
 
   const handleViewTickets = () => {
@@ -354,7 +392,7 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
                 <div className="flex items-start gap-4 mb-4">
                   <div
                     className="h-16 w-16 rounded-md bg-cover bg-center flex-shrink-0"
-                    style={{ backgroundImage: `url(${event.image})` }}
+                    style={{ backgroundImage: `url(${event.image_url})` }}
                   />
                   <div>
                     <h3 className="font-medium text-white">{event.name}</h3>
@@ -370,8 +408,8 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
                     <span>Tickets ({quantity})</span>
                     <span>
                       {isConnected
-                        ? `$${(event.priceUsd * quantity).toFixed(2)} / ${(event.priceEth * quantity).toFixed(3)} ETH`
-                        : `$${(event.priceUsd * quantity).toFixed(2)}`}
+                        ? `$${(event.price_usd * quantity).toFixed(2)} / ${(event.price_eth * quantity).toFixed(3)} ETH`
+                        : `$${(event.price_usd * quantity).toFixed(2)}`}
                     </span>
                   </div>
 
@@ -385,8 +423,8 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
                       <span>Total</span>
                       <span>
                         {isConnected
-                          ? `$${(event.priceUsd * quantity + feeUsd).toFixed(2)} / ${(event.priceEth * quantity + feeEth).toFixed(3)} ETH`
-                          : `$${(event.priceUsd * quantity + feeUsd).toFixed(2)}`}
+                          ? `$${(event.price_usd * quantity + feeUsd).toFixed(2)} / ${(event.price_eth * quantity + feeEth).toFixed(3)} ETH`
+                          : `$${(event.price_usd * quantity + feeUsd).toFixed(2)}`}
                       </span>
                     </div>
                   </div>
@@ -427,83 +465,3 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
   )
 }
 
-const events = [
-  {
-    id: "1",
-    name: "Blockchain Summit 2023",
-    date: "June 15, 2023",
-    time: "10:00 AM",
-    location: "San Francisco, CA",
-    category: "Conference",
-    priceUsd: 450,
-    priceEth: 0.15,
-    image: "/placeholder.svg?height=400&width=600",
-    soldTickets: 156,
-    totalTickets: 200,
-  },
-  {
-    id: "2",
-    name: "NFT Art Exhibition",
-    date: "July 22, 2023",
-    time: "6:00 PM",
-    location: "New York, NY",
-    category: "Exhibition",
-    priceUsd: 240,
-    priceEth: 0.08,
-    image: "/placeholder.svg?height=400&width=600",
-    soldTickets: 89,
-    totalTickets: 150,
-  },
-  {
-    id: "3",
-    name: "Web3 Music Festival",
-    date: "August 5, 2023",
-    time: "4:00 PM",
-    location: "Miami, FL",
-    category: "Festival",
-    priceUsd: 750,
-    priceEth: 0.25,
-    image: "/placeholder.svg?height=400&width=600",
-    soldTickets: 412,
-    totalTickets: 500,
-  },
-  {
-    id: "4",
-    name: "DeFi Developer Conference",
-    date: "September 10, 2023",
-    time: "9:00 AM",
-    location: "Austin, TX",
-    category: "Conference",
-    priceUsd: 360,
-    priceEth: 0.12,
-    image: "/placeholder.svg?height=400&width=600",
-    soldTickets: 78,
-    totalTickets: 300,
-  },
-  {
-    id: "5",
-    name: "Metaverse Concert",
-    date: "October 18, 2023",
-    time: "8:00 PM",
-    location: "Los Angeles, CA",
-    category: "Concert",
-    priceUsd: 540,
-    priceEth: 0.18,
-    image: "/placeholder.svg?height=400&width=600",
-    soldTickets: 245,
-    totalTickets: 400,
-  },
-  {
-    id: "6",
-    name: "Crypto Gaming Tournament",
-    date: "November 25, 2023",
-    time: "2:00 PM",
-    location: "Seattle, WA",
-    category: "Gaming",
-    priceUsd: 150,
-    priceEth: 0.05,
-    image: "/placeholder.svg?height=400&width=600",
-    soldTickets: 120,
-    totalTickets: 250,
-  },
-]

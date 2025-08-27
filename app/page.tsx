@@ -1,12 +1,43 @@
+"use client"
+
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { CalendarDays, Clock, MapPin, Ticket } from "lucide-react"
-import { artists, venues, events } from "@/lib/data"
+import { CalendarDays, Clock, MapPin, Ticket, Loader2 } from "lucide-react"
+import { artists, venues } from "@/lib/data"
 import { Price } from "@/components/price"
+import type { Event } from "@/lib/supabase"
 
 export default function Home() {
+  const [events, setEvents] = useState<Event[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        console.log('📅 Fetching events from API...')
+        const response = await fetch('/api/events')
+        const data = await response.json()
+        
+        if (data.success) {
+          setEvents(data.events)
+          console.log(`✅ Loaded ${data.events.length} events`)
+        } else {
+          setError(data.error || 'Failed to load events')
+        }
+      } catch (err) {
+        console.error('❌ Error fetching events:', err)
+        setError('Failed to load events')
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    fetchEvents()
+  }, [])
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
       <div className="container mx-auto px-4 py-8 pb-24 pt-28">
@@ -46,24 +77,40 @@ export default function Home() {
         </div>
 
         <h2 className="text-2xl font-bold text-white mb-6">View All Events</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {events.map((event) => (
-            <Link href={`/events/${event.id}`} key={event.id}>
-              <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02] bg-slate-800 border-slate-700">
-                <div className="relative h-48 w-full">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${event.image})` }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent opacity-70" />
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="flex justify-between items-center">
-                      <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-                        {event.category}
-                      </span>
+        
+        {loading ? (
+          <div className="flex justify-center items-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+            <span className="ml-2 text-slate-300">Loading events...</span>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <div className="text-red-400 mb-4">Failed to load events</div>
+            <div className="text-slate-400 text-sm">{error}</div>
+          </div>
+        ) : events.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="text-slate-400">No events found</div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {events.map((event) => (
+              <Link href={`/events/${event.id}`} key={event.id}>
+                <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02] bg-slate-800 border-slate-700">
+                  <div className="relative h-48 w-full">
+                    <div
+                      className="absolute inset-0 bg-cover bg-center"
+                      style={{ backgroundImage: `url(${event.image_url})` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent opacity-70" />
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <div className="flex justify-between items-center">
+                        <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-medium">
+                          {event.category}
+                        </span>
                       <Price
-                        usd={event.priceUsd}
-                        eth={event.priceEth}
+                        usd={event.price_usd}
+                        eth={event.price_eth}
                         className="bg-slate-900 bg-opacity-80 text-white px-3 py-1 rounded-full text-xs font-medium"
                       />
                     </div>
@@ -83,15 +130,15 @@ export default function Home() {
                   </div>
                   <div className="mb-1 flex justify-between text-xs text-slate-400">
                     <span>
-                      Tickets sold: {event.soldTickets}/{event.totalTickets}
+                      Tickets sold: {event.sold_tickets}/{event.total_tickets}
                     </span>
-                    <span>{Math.round((event.soldTickets / event.totalTickets) * 100)}%</span>
+                    <span>{Math.round((event.sold_tickets / event.total_tickets) * 100)}%</span>
                   </div>
-                  <Progress value={(event.soldTickets / event.totalTickets) * 100} className="h-2 bg-slate-700" />
+                  <Progress value={(event.sold_tickets / event.total_tickets) * 100} className="h-2 bg-slate-700" />
                   <div className="mt-4 flex justify-between items-center">
                     <div className="flex items-center text-slate-300">
                       <Ticket className="h-4 w-4 mr-1" />
-                      <span className="text-sm">{event.totalTickets - event.soldTickets} available</span>
+                      <span className="text-sm">{event.total_tickets - event.sold_tickets} available</span>
                     </div>
                     <Button
                       size="sm"
@@ -106,6 +153,7 @@ export default function Home() {
             </Link>
           ))}
         </div>
+        )}
       </div>
     </div>
   )

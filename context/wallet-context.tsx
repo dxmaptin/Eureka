@@ -4,6 +4,8 @@ import { ethers } from "ethers"
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 import { useToast } from "@/components/ui/use-toast"
 import { magic, type MagicUser, getDemoUser, addDemoUser } from "@/lib/magic"
+import { DatabaseService } from "@/lib/database"
+import type { User } from "@/lib/supabase"
 
 //For ethereum declaration
 declare global {
@@ -18,6 +20,7 @@ interface WalletContextType {
   balance: string
   walletType: 'metamask' | 'magic' | null
   user: MagicUser | null
+  dbUser: User | null
   loginMethod: 'wallet' | 'email' | 'phone' | 'social' | null
   isCustodial: boolean
   connect: (type: string) => void
@@ -35,10 +38,36 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [balance, setBalance] = useState("1.245")
   const [walletType, setWalletType] = useState<'metamask' | 'magic' | null>(null)
   const [user, setUser] = useState<MagicUser | null>(null)
+  const [dbUser, setDbUser] = useState<User | null>(null)
   const [loginMethod, setLoginMethod] = useState<'wallet' | 'email' | 'phone' | 'social' | null>(null)
   const { toast } = useToast()
 
   const isCustodial = walletType === 'magic'
+
+  // Helper function to create/update user in database
+  const syncUserWithDatabase = async (walletAddress: string, userData: {
+    email?: string
+    phone?: string
+    loginMethod: 'magic_email' | 'magic_phone' | 'magic_social' | 'metamask'
+  }) => {
+    console.log('🔄 Syncing user with database:', walletAddress)
+    
+    try {
+      const dbUserData = await DatabaseService.createOrUpdateUser({
+        wallet_address: walletAddress,
+        email: userData.email,
+        phone: userData.phone,
+        login_method: userData.loginMethod
+      })
+      
+      if (dbUserData) {
+        setDbUser(dbUserData)
+        console.log('✅ User synced with database:', dbUserData.id)
+      }
+    } catch (error) {
+      console.error('❌ Error syncing user with database:', error)
+    }
+  }
 
   // Check if user is already logged in with Magic on component mount
   useEffect(() => {
@@ -126,7 +155,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         address: userAddress?.slice(0, 6) + '...' 
       })
       
-      // Set user state
+      // Set user state and sync with database
       const magicUser: MagicUser = {
         issuer: metadata.issuer || '',
         email: metadata.email || email,
@@ -138,6 +167,12 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       setIsConnected(true)
       setWalletType('magic')
       setLoginMethod('email')
+      
+      // Sync with database
+      await syncUserWithDatabase(userAddress, {
+        email: metadata.email || email,
+        loginMethod: 'magic_email'
+      })
       
       // Get balance
       if (userAddress) {
@@ -310,6 +345,11 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         setAddress(address)
         setUser(null) // Clear Magic user
         
+        // Sync with database
+        await syncUserWithDatabase(address, {
+          loginMethod: 'metamask'
+        })
+        
         // Get Balance of the connected account
         const provider = new ethers.BrowserProvider(window.ethereum)
         const balanceValue = await provider.getBalance(address)
@@ -354,6 +394,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         balance,
         walletType,
         user,
+        dbUser,
         loginMethod,
         isCustodial,
         connect,

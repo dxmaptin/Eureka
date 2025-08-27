@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -9,22 +9,70 @@ import { Separator } from "@/components/ui/separator"
 import { useWallet } from "@/context/wallet-context"
 import { ConnectWalletModal } from "@/components/connect-wallet-modal"
 import { useToast } from "@/components/ui/use-toast"
-import { CalendarDays, Clock, MapPin, Ticket, Users, ChevronRight, Info, Share2 } from "lucide-react"
-import { events } from "@/lib/data"
+import { CalendarDays, Clock, MapPin, Ticket, Users, ChevronRight, Info, Share2, Loader2 } from "lucide-react"
 import { Price } from "@/components/price"
+import type { Event } from "@/lib/supabase"
 
-export default function EventPage({ params }: { params: { id: string } }) {
+export default function EventPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
   const { isConnected } = useWallet()
   const { toast } = useToast()
   const [showConnectModal, setShowConnectModal] = useState(false)
   const [quantity, setQuantity] = useState(1)
+  const [event, setEvent] = useState<Event | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Find event by ID (in a real app, this would be fetched from an API)
-  const event = events.find((e) => e.id === params.id)
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const { id } = await params
+        console.log('🎫 Fetching event:', id)
+        const response = await fetch(`/api/events/${id}`)
+        const data = await response.json()
+        
+        if (data.success) {
+          setEvent(data.event)
+          console.log('✅ Event loaded:', data.event.name)
+        } else {
+          setError(data.error || 'Event not found')
+        }
+      } catch (err) {
+        console.error('❌ Error fetching event:', err)
+        setError('Failed to load event')
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    fetchEvent()
+  }, [params])
 
-  if (!event) {
-    return <div className="container mx-auto px-4 py-8 text-center">Event not found</div>
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 flex items-center justify-center">
+        <div className="flex items-center space-x-2 text-white">
+          <Loader2 className="h-6 w-6 animate-spin" />
+          <span>Loading event...</span>
+        </div>
+      </div>
+    )
+  }
+
+  // Show error state  
+  if (error || !event) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-400 text-xl mb-4">Event Not Found</div>
+          <div className="text-slate-400 mb-6">{error}</div>
+          <Button onClick={() => router.push('/')} variant="outline">
+            Back to Events
+          </Button>
+        </div>
+      </div>
+    )
   }
 
   const handleQuantityChange = (newQuantity: number) => {
@@ -33,13 +81,14 @@ export default function EventPage({ params }: { params: { id: string } }) {
     }
   }
 
-  const handlePurchase = () => {
+  const handlePurchase = async () => {
     if (!isConnected) {
       setShowConnectModal(true)
       return
     }
 
-    router.push(`/events/${params.id}/purchase?quantity=${quantity}`)
+    const { id } = await params
+    router.push(`/events/${id}/purchase?quantity=${quantity}`)
   }
 
   const handleShare = () => {
@@ -62,7 +111,7 @@ export default function EventPage({ params }: { params: { id: string } }) {
           {/* Event Details - Left Column */}
           <div className="lg:col-span-2">
             <div className="relative h-64 md:h-96 w-full rounded-lg overflow-hidden mb-6">
-              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${event.image})` }} />
+              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${event.image_url})` }} />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
               <div className="absolute bottom-4 left-4">
                 <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-medium">
@@ -137,17 +186,17 @@ export default function EventPage({ params }: { params: { id: string } }) {
             <Card className="bg-slate-800 border-slate-700 sticky top-28">
               <CardContent className="p-6">
                 <div className="text-2xl font-bold text-white mb-2">
-                  <Price usd={event.priceUsd} eth={event.priceEth} />
+                  <Price usd={event.price_usd} eth={event.price_eth} />
                 </div>
                 <div className="text-sm text-slate-400 mb-4">per ticket</div>
 
                 <div className="mb-1 flex justify-between text-xs text-slate-400">
                   <span>
-                    Tickets sold: {event.soldTickets}/{event.totalTickets}
+                    Tickets sold: {event.sold_tickets}/{event.total_tickets}
                   </span>
-                  <span>{Math.round((event.soldTickets / event.totalTickets) * 100)}%</span>
+                  <span>{Math.round((event.sold_tickets / event.total_tickets) * 100)}%</span>
                 </div>
-                <Progress value={(event.soldTickets / event.totalTickets) * 100} className="h-2 mb-6 bg-slate-700" />
+                <Progress value={(event.sold_tickets / event.total_tickets) * 100} className="h-2 mb-6 bg-slate-700" />
 
                 <div className="mb-6">
                   <div className="text-sm font-medium text-slate-300 mb-2">Select Quantity</div>
@@ -179,8 +228,8 @@ export default function EventPage({ params }: { params: { id: string } }) {
                     <span>Subtotal</span>
                     <span>
                       {isConnected
-                        ? `$${(event.priceUsd * quantity).toFixed(2)} / ${(event.priceEth * quantity).toFixed(3)} ETH`
-                        : `$${(event.priceUsd * quantity).toFixed(2)}`}
+                        ? `$${(event.price_usd * quantity).toFixed(2)} / ${(event.price_eth * quantity).toFixed(3)} ETH`
+                        : `$${(event.price_usd * quantity).toFixed(2)}`}
                     </span>
                   </div>
                   <div className="flex justify-between text-slate-300 mb-2">
@@ -194,8 +243,8 @@ export default function EventPage({ params }: { params: { id: string } }) {
                     <span>Total</span>
                     <span>
                       {isConnected
-                        ? `$${(event.priceUsd * quantity + feeUsd).toFixed(2)} / ${(event.priceEth * quantity + feeEth).toFixed(3)} ETH`
-                        : `$${(event.priceUsd * quantity + feeUsd).toFixed(2)}`}
+                        ? `$${(event.price_usd * quantity + feeUsd).toFixed(2)} / ${(event.price_eth * quantity + feeEth).toFixed(3)} ETH`
+                        : `$${(event.price_usd * quantity + feeUsd).toFixed(2)}`}
                     </span>
                   </div>
                 </div>
