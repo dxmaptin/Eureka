@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useWallet } from "@/context/wallet-context"
-import { Wallet, Mail, Phone, Chrome, Twitter, Loader2 } from "lucide-react"
+import { Wallet, Mail, Phone, Globe, Hash, Loader2 } from "lucide-react"
 
 interface ConnectWalletModalProps {
   isOpen: boolean
@@ -34,15 +34,31 @@ export function ConnectWalletModal({ isOpen, onClose }: ConnectWalletModalProps)
   }
 
   const handleEmailConnect = async () => {
-    if (!email.trim()) return
+    console.log('🎯 Email connect button clicked, email:', email)
     
+    if (!email.trim()) {
+      console.log('❌ Email is empty')
+      return
+    }
+    
+    console.log('📝 Setting loading state and closing modal...')
     setIsLoading(true)
+    
     try {
-      await connectWithEmail(email)
+      // Close this modal first to prevent conflicts with Magic's modal
+      console.log('🔒 Closing connect modal...')
       onClose()
+      
+      console.log('📞 Calling connectWithEmail...')
+      await connectWithEmail(email)
+      
+      console.log('✅ Email authentication completed successfully')
     } catch (error) {
-      console.error("Email login failed:", error)
+      console.error("❌ Email login failed:", error)
+      // Reopen modal on error
+      // Note: We don't automatically reopen to avoid UI conflicts
     } finally {
+      console.log('🔄 Resetting loading state')
       setIsLoading(false)
     }
   }
@@ -52,10 +68,13 @@ export function ConnectWalletModal({ isOpen, onClose }: ConnectWalletModalProps)
     
     setIsLoading(true)
     try {
-      await connectWithPhone(phone)
+      // Close this modal first to prevent conflicts with Magic's modal
       onClose()
+      await connectWithPhone(phone)
     } catch (error) {
       console.error("Phone login failed:", error)
+      // Reopen modal on error
+      // Note: We don't automatically reopen to avoid UI conflicts
     } finally {
       setIsLoading(false)
     }
@@ -185,7 +204,7 @@ export function ConnectWalletModal({ isOpen, onClose }: ConnectWalletModalProps)
                 variant="outline"
                 className="w-full border-slate-600 text-slate-300 hover:bg-slate-700"
               >
-                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Chrome className="mr-2 h-4 w-4" />}
+                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Globe className="mr-2 h-4 w-4" />}
                 Continue with Google
               </Button>
               <Button
@@ -194,7 +213,7 @@ export function ConnectWalletModal({ isOpen, onClose }: ConnectWalletModalProps)
                 variant="outline"
                 className="w-full border-slate-600 text-slate-300 hover:bg-slate-700"
               >
-                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Twitter className="mr-2 h-4 w-4" />}
+                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Hash className="mr-2 h-4 w-4" />}
                 Continue with Twitter
               </Button>
               <Button

@@ -94,7 +94,10 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const connectWithEmail = async (email: string) => {
+    console.log('🔍 Starting email authentication for:', email)
+    
     if (!magic) {
+      console.error('❌ Magic instance not available')
       toast({
         title: "Magic Not Available",
         description: "Please check your Magic configuration.",
@@ -103,13 +106,25 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       return
     }
 
+    console.log('✅ Magic instance available, starting login...')
+
     try {
-      // Real Magic.link email authentication with OTP
-      await magic.auth.loginWithEmailOTP({ email })
+      // Try Magic.link email magic link authentication first
+      console.log('📧 Trying magic.auth.loginWithMagicLink...')
+      await magic.auth.loginWithMagicLink({ 
+        email
+      })
+      
+      console.log('✅ OTP login successful, getting user info...')
       
       // Get user info after successful login
       const metadata = await magic.user.getInfo()
       const userAddress = metadata.publicAddress || ''
+      
+      console.log('👤 User metadata received:', { 
+        email: metadata.email, 
+        address: userAddress?.slice(0, 6) + '...' 
+      })
       
       // Set user state
       const magicUser: MagicUser = {
@@ -142,9 +157,24 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       })
     } catch (error) {
       console.error("Error logging in with email:", error)
+      
+      // Handle specific Magic.link errors
+      let errorMessage = "Please check your email for the login link and try again."
+      
+      if (error instanceof Error) {
+        // Handle specific Magic.link error codes
+        if (error.message.includes('User denied')) {
+          errorMessage = "Login was cancelled. Please try again."
+        } else if (error.message.includes('Network')) {
+          errorMessage = "Network error. Please check your connection and try again."
+        } else if (error.message.includes('Rate limit')) {
+          errorMessage = "Too many login attempts. Please wait a moment and try again."
+        }
+      }
+      
       toast({
         title: "Email Login Failed",
-        description: "Please check your email for the login link and try again.",
+        description: errorMessage,
         variant: "destructive",
       })
     }
@@ -161,8 +191,11 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      // Real Magic.link SMS authentication with OTP
-      await magic.auth.loginWithSMS({ phoneNumber: phone })
+      // Real Magic.link SMS authentication with OTP - use Magic's built-in UI
+      await magic.auth.loginWithSMS({ 
+        phoneNumber: phone,
+        showUI: true  // This enables Magic's built-in OTP modal
+      })
       
       // Get user info after successful login
       const metadata = await magic.user.getInfo()
@@ -199,9 +232,26 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       })
     } catch (error) {
       console.error("Error logging in with phone:", error)
+      
+      // Handle specific Magic.link errors
+      let errorMessage = "Please check your SMS for the OTP and try again."
+      
+      if (error instanceof Error) {
+        // Handle specific Magic.link error codes
+        if (error.message.includes('User denied')) {
+          errorMessage = "Login was cancelled. Please try again."
+        } else if (error.message.includes('Network')) {
+          errorMessage = "Network error. Please check your connection and try again."
+        } else if (error.message.includes('Rate limit')) {
+          errorMessage = "Too many login attempts. Please wait a moment and try again."
+        } else if (error.message.includes('Invalid phone')) {
+          errorMessage = "Please enter a valid phone number."
+        }
+      }
+      
       toast({
-        title: "Phone Login Failed",
-        description: "Please check your SMS for the OTP and try again.",
+        title: "Phone Login Failed", 
+        description: errorMessage,
         variant: "destructive",
       })
     }
