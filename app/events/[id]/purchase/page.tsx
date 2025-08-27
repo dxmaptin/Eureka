@@ -7,10 +7,11 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useWallet } from "@/context/wallet-context"
 import { useToast } from "@/components/ui/use-toast"
-import { ArrowLeft, CreditCard, Wallet, Check, Loader2, ExternalLink } from "lucide-react"
+import { ArrowLeft, CreditCard, Wallet, Check, Loader2, ExternalLink, AlertCircle } from "lucide-react"
 import { ethers } from "ethers"
 import MyNFTAbi from "@/artifacts/contracts/MyNFT.sol/MyNFT.json"
 import { Price } from "@/components/price"
+import { CreditCardForm, CreditCardData } from "@/components/credit-card-form"
 
 export default function PurchasePage({ params }: { params: { id: string } }) {
   const router = useRouter()
@@ -19,14 +20,27 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
   const { toast } = useToast()
 
   const [quantity, setQuantity] = useState(1)
-  const [purchaseStatus, setPurchaseStatus] = useState<"idle" | "processing" | "minting" | "completed">("idle")
+  const [purchaseStatus, setPurchaseStatus] = useState<"idle" | "processing" | "minting" | "completed" | "failed">("idle")
   const [transactionHash, setTransactionHash] = useState("")
   const [activeTab, setActiveTab] = useState("crypto")
+  const [creditCardValid, setCreditCardValid] = useState(false)
+  const [creditCardData, setCreditCardData] = useState<CreditCardData>()
+  const [errorMessage, setErrorMessage] = useState("")
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
 
   // Find event by ID (in a real app, this would be fetched from an API)
   const event = events.find((e) => e.id === params.id)
   const feeUsd = 6
   const feeEth = 0.002
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+    }
+  }, [timeoutId])
 
   useEffect(() => {
     // Get quantity from URL params
@@ -45,36 +59,139 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
     return <div className="container mx-auto px-4 py-8 text-center">Event not found!</div>
   }
 
-  // Pruchase process
+  // Purchase process with improved error handling
   const CONTRACT_ADDRESS = "0x593967C50E396e0b3Be8B8f7216e5786f78783cd";
   const METADATA_URI = "https://ipfs.io/ipfs/bafkreigjlju3g3lbfoo5vugyioakk4hdskzssp4f6dpw77b4ibt62gp5ay";
 
   const handlePurchase = async () => {
+    console.log('🎫 Starting purchase process with payment method:', activeTab)
+    
+    // Validate credit card if using fiat payment
+    if (activeTab === "fiat" && !creditCardValid) {
+      setErrorMessage("Please fill in all credit card fields correctly")
+      toast({
+        title: "Invalid Payment Information",
+        description: "Please check your credit card details and try again.",
+        variant: "destructive",
+      })
+      return
+    }
+
     setPurchaseStatus("processing")
+    setErrorMessage("")
+    
+    // Set up timeout for the entire process (30 seconds)
+    const timeout = setTimeout(() => {
+      console.log('⏰ Purchase timeout reached')
+      setPurchaseStatus("failed")
+      setErrorMessage("Transaction timed out. Please try again.")
+      toast({
+        title: "Transaction Timeout",
+        description: "The transaction took too long to process. Please try again.",
+        variant: "destructive",
+      })
+    }, 30000) // 30 second timeout
+    
+    setTimeoutId(timeout)
+
     try {
-      // Wait for payment simulation (replace with real payment logic if needed)
-      await new Promise((res) => setTimeout(res, 1500))
+      // Payment processing simulation
+      console.log('💳 Processing payment...')
+      if (activeTab === "fiat") {
+        console.log('💳 Credit card payment simulation')
+        // Simulate credit card processing (longer delay for realism)
+        await new Promise((resolve, reject) => {
+          setTimeout(() => {
+            // Simulate random payment failures for demo
+            if (Math.random() < 0.2) { // 20% chance of payment failure
+              reject(new Error("Credit card payment declined. Please check your card details or try a different payment method."))
+            } else {
+              resolve(true)
+            }
+          }, 2000)
+        })
+      } else {
+        console.log('🔗 Crypto payment preparation')
+        // Shorter delay for crypto payments
+        await new Promise((res) => setTimeout(res, 1000))
+      }
+      
+      console.log('✅ Payment processed, starting minting...')
       setPurchaseStatus("minting")
 
-      if (!window.ethereum) throw new Error("No wallet found")
-      const provider = new ethers.BrowserProvider(window.ethereum)
-      const signer = await provider.getSigner()
-      const contract = new ethers.Contract(CONTRACT_ADDRESS, MyNFTAbi.abi, signer)
-      const tx = await contract.mintNFT(address, METADATA_URI)
-      setTransactionHash(tx.hash)
-      await tx.wait()
+      // Check if we have MetaMask for crypto payments
+      if (activeTab === "crypto") {
+        if (!window.ethereum) {
+          throw new Error("MetaMask not found. Please install MetaMask to pay with crypto.")
+        }
+        
+        console.log('🦊 Using MetaMask for minting')
+        const provider = new ethers.BrowserProvider(window.ethereum)
+        const signer = await provider.getSigner()
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, MyNFTAbi.abi, signer)
+        
+        console.log('📝 Calling contract.mintNFT...')
+        const tx = await contract.mintNFT(address, METADATA_URI)
+        setTransactionHash(tx.hash)
+        console.log('📄 Transaction hash:', tx.hash)
+        
+        console.log('⏳ Waiting for transaction confirmation...')
+        await tx.wait()
+      } else {
+        // For fiat payments, simulate the minting process (since gas fees are covered)
+        console.log('🎨 Simulating NFT minting for fiat payment...')
+        await new Promise((resolve, reject) => {
+          setTimeout(() => {
+            // Simulate random minting failures
+            if (Math.random() < 0.1) { // 10% chance of minting failure
+              reject(new Error("NFT minting failed. Please contact support."))
+            } else {
+              // Generate a fake transaction hash for demo
+              const fakeHash = '0x' + Math.random().toString(16).substring(2, 66).padEnd(64, '0')
+              setTransactionHash(fakeHash)
+              resolve(true)
+            }
+          }, 3000) // 3 second minting simulation
+        })
+      }
+      
+      // Clear timeout since we succeeded
+      clearTimeout(timeout)
+      setTimeoutId(null)
+      
+      console.log('🎉 Purchase completed successfully!')
       setPurchaseStatus("completed")
       toast({
         title: "Purchase Successful",
         description: "Your NFT ticket has been minted and added to your wallet",
       })
     } catch (err) {
-      setPurchaseStatus("idle")
+      console.error('❌ Purchase failed:', err)
+      
+      // Clear timeout
+      clearTimeout(timeout)
+      setTimeoutId(null)
+      
+      setPurchaseStatus("failed")
+      const errorMsg = err instanceof Error ? err.message : "Transaction failed."
+      setErrorMessage(errorMsg)
+      
       toast({
-        title: "Minting Failed",
-        description: err instanceof Error ? err.message : "Transaction failed.",
+        title: "Purchase Failed",
+        description: errorMsg,
         variant: "destructive",
       })
+    }
+  }
+
+  const handleRetry = () => {
+    console.log('🔄 Retrying purchase...')
+    setPurchaseStatus("idle")
+    setErrorMessage("")
+    setTransactionHash("")
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+      setTimeoutId(null)
     }
   }
 
@@ -131,52 +248,22 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
                     </TabsContent>
 
                     <TabsContent value="fiat" className="mt-4">
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-slate-300">Card Number</label>
-                          <input
-                            type="text"
-                            placeholder="1234 5678 9012 3456"
-                            className="w-full p-2 rounded-md border border-slate-600 bg-slate-900 text-white"
-                          />
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">Expiry Date</label>
-                            <input
-                              type="text"
-                              placeholder="MM/YY"
-                              className="w-full p-2 rounded-md border border-slate-600 bg-slate-900 text-white"
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">CVC</label>
-                            <input
-                              type="text"
-                              placeholder="123"
-                              className="w-full p-2 rounded-md border border-slate-600 bg-slate-900 text-white"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-slate-300">Name on Card</label>
-                          <input
-                            type="text"
-                            placeholder="John Doe"
-                            className="w-full p-2 rounded-md border border-slate-600 bg-slate-900 text-white"
-                          />
-                        </div>
-                      </div>
+                      <CreditCardForm 
+                        onValidityChange={setCreditCardValid}
+                        onDataChange={setCreditCardData}
+                      />
                     </TabsContent>
                   </Tabs>
 
                   <Button
-                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
+                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 disabled:opacity-50"
                     onClick={handlePurchase}
+                    disabled={activeTab === "fiat" && !creditCardValid}
                   >
-                    Complete Purchase
+                    {activeTab === "fiat" && !creditCardValid 
+                      ? "Please Complete Payment Details" 
+                      : "Complete Purchase"
+                    }
                   </Button>
                 </CardContent>
               </Card>
@@ -225,6 +312,34 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
                         >
                           View My Tickets
                         </Button>
+                      </>
+                    )}
+
+                    {purchaseStatus === "failed" && (
+                      <>
+                        <div className="h-12 w-12 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
+                          <AlertCircle className="h-6 w-6 text-red-500" />
+                        </div>
+                        <h2 className="text-xl font-semibold text-white mb-2">Purchase Failed</h2>
+                        <p className="text-slate-400 mb-6">
+                          {errorMessage || "Something went wrong with your purchase. Please try again."}
+                        </p>
+
+                        <div className="space-y-3">
+                          <Button
+                            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
+                            onClick={handleRetry}
+                          >
+                            Try Again
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            className="w-full text-slate-300 hover:text-white"
+                            onClick={handleBack}
+                          >
+                            Back to Event
+                          </Button>
+                        </div>
                       </>
                     )}
                   </div>
