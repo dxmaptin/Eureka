@@ -119,41 +119,32 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
       console.log('✅ Payment processed, starting minting...')
       setPurchaseStatus("minting")
 
-      // Check if we have MetaMask for crypto payments
-      if (activeTab === "crypto") {
-        if (!window.ethereum) {
-          throw new Error("MetaMask not found. Please install MetaMask to pay with crypto.")
-        }
-        
-        console.log('🦊 Using MetaMask for minting')
-        const provider = new ethers.BrowserProvider(window.ethereum)
-        const signer = await provider.getSigner()
-        const contract = new ethers.Contract(CONTRACT_ADDRESS, MyNFTAbi.abi, signer)
-        
-        console.log('📝 Calling contract.mintNFT...')
-        const tx = await contract.mintNFT(address, METADATA_URI)
-        setTransactionHash(tx.hash)
-        console.log('📄 Transaction hash:', tx.hash)
-        
-        console.log('⏳ Waiting for transaction confirmation...')
-        await tx.wait()
-      } else {
-        // For fiat payments, simulate the minting process (since gas fees are covered)
-        console.log('🎨 Simulating NFT minting for fiat payment...')
-        await new Promise((resolve, reject) => {
-          setTimeout(() => {
-            // Simulate random minting failures
-            if (Math.random() < 0.1) { // 10% chance of minting failure
-              reject(new Error("NFT minting failed. Please contact support."))
-            } else {
-              // Generate a fake transaction hash for demo
-              const fakeHash = '0x' + Math.random().toString(16).substring(2, 66).padEnd(64, '0')
-              setTransactionHash(fakeHash)
-              resolve(true)
-            }
-          }, 3000) // 3 second minting simulation
+      // Use relayer API for both crypto and fiat payments
+      console.log('🔗 Using relayer API for minting (gas-free for user)')
+      
+      const mintResponse = await fetch('/api/mint-ticket', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userAddress: address,
+          paymentMethod: activeTab,
+          eventId: params.id,
+          quantity: quantity
         })
+      })
+      
+      const mintResult = await mintResponse.json()
+      
+      if (!mintResult.success) {
+        throw new Error(mintResult.error || 'Minting failed')
       }
+      
+      console.log('📄 Transaction hash from relayer:', mintResult.transactionHash)
+      console.log('💰 Gas cost covered by relayer:', mintResult.estimatedGasCost, 'ETH')
+      
+      setTransactionHash(mintResult.transactionHash)
       
       // Clear timeout since we succeeded
       clearTimeout(timeout)
@@ -242,7 +233,8 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
 
                         <div className="p-4 bg-slate-900 rounded-lg">
                           <div className="text-sm text-slate-400 mb-1">Network</div>
-                          <div className="text-slate-200">Ethereum Mainnet</div>
+                          <div className="text-slate-200">Ethereum Sepolia (Testnet)</div>
+                          <div className="text-xs text-slate-500 mt-1">Gas fees covered by relayer</div>
                         </div>
                       </div>
                     </TabsContent>
@@ -288,8 +280,13 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
                         <div className="mt-4 p-3 bg-slate-900 rounded-lg text-left">
                           <div className="text-sm text-slate-400 mb-1">Transaction Hash</div>
                           <div className="text-slate-200 font-mono text-xs truncate">{transactionHash}</div>
-                          <a href="#" className="text-purple-400 text-sm flex items-center mt-1 hover:text-purple-300">
-                            View on Etherscan
+                          <a 
+                            href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
+                            target="_blank"
+                            rel="noopener noreferrer" 
+                            className="text-purple-400 text-sm flex items-center mt-1 hover:text-purple-300"
+                          >
+                            View on Sepolia Etherscan
                             <ExternalLink className="h-3 w-3 ml-1" />
                           </a>
                         </div>

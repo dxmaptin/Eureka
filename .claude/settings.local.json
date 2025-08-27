@@ -10,7 +10,8 @@
       "Bash(npx hardhat run:*)",
       "WebFetch(domain:docs.chain.link)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []
