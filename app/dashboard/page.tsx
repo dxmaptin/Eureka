@@ -9,6 +9,7 @@ import { CalendarDays, Clock, MapPin, Ticket, Loader2, ExternalLink, User, QrCod
 import { Price } from "@/components/price"
 import Link from "next/link"
 import type { Ticket, User as DatabaseUser, PurchaseHistory } from "@/lib/supabase"
+import EventHeader from "@/components/event-header"
 import { TicketQR } from "@/components/ticket-qr"
 import {
   Dialog,
@@ -117,6 +118,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
+      <EventHeader />
       <div className="container mx-auto px-4 py-8 pt-28">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">My Dashboard</h1>

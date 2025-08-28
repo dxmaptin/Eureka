@@ -107,7 +107,14 @@ export default function Home() {
           break
         }
         case 'navigate': {
-          if (intent.href) router.push(intent.href)
+          if (intent.href) {
+            const h = String(intent.href).trim().toLowerCase()
+            let path = '/'
+            if (h === '/' || h.includes('event') || h.includes('home')) path = '/'
+            if (h.includes('about')) path = '/about'
+            if (h.includes('ticket') || h.includes('dashboard')) path = '/dashboard'
+            router.push(path)
+          }
           break
         }
         case 'search': {

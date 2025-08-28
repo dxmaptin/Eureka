@@ -33,6 +33,7 @@ Rules:
 - For buying tickets like "buy 2 tickets for X", use type "buy" with quantity.
 - If user asks to list their ticket, use "list_ticket" and include ticketId and priceEth when specified; otherwise leave them null.
 - If the query is a general search, use type "search" with a cleaned query string.
+- For navigate, constrain href to one of: "/" (events), "/about", "/dashboard" (my tickets). Map synonyms like "home", "events" -> "/"; "about us" -> "/about"; any phrase containing "ticket" or "dashboard" -> "/dashboard".
 - Never include commentary; output valid JSON only.`
 
     const user = `User query: ${query}\nKnown events: ${JSON.stringify(eventBrief)}`
@@ -75,4 +76,3 @@ Rules:
     return NextResponse.json({ success: false, error: 'Failed to interpret query' }, { status: 500 })
   }
 }
-
