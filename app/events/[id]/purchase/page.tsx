@@ -7,13 +7,16 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useWallet } from "@/context/wallet-context"
 import { useToast } from "@/components/ui/use-toast"
-import { ArrowLeft, CreditCard, Wallet, Check, Loader2, ExternalLink, AlertCircle } from "lucide-react"
+import { ArrowLeft, CreditCard, Wallet, Check, Loader2, ExternalLink, AlertCircle, QrCode } from "lucide-react"
 import { ethers } from "ethers"
 import MyNFTAbi from "@/artifacts/contracts/MyNFT.sol/MyNFT.json"
 import { Price } from "@/components/price"
 import { CreditCardForm, CreditCardData } from "@/components/credit-card-form"
 import type { Event } from "@/lib/supabase"
 import EventHeader from "@/components/event-header"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+// (Dropdown replaced by an "Other" tab)
+import QRCode from "qrcode"
 
 export default function PurchasePage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
@@ -31,6 +34,9 @@ export default function PurchasePage({ params }: { params: Promise<{ id: string 
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
   const [event, setEvent] = useState<Event | null>(null)
   const [loading, setLoading] = useState(true)
+  const [altMethod, setAltMethod] = useState<"alipay" | "wechat" | "applepay" | null>(null)
+  const [qrOpen, setQrOpen] = useState(false)
+  const [qrDataUrl, setQrDataUrl] = useState<string>("")
 
   const feeUsd = 6
   const feeEth = 0.002
@@ -168,6 +174,7 @@ export default function PurchasePage({ params }: { params: Promise<{ id: string 
         body: JSON.stringify({
           userAddress: address,
           paymentMethod: activeTab,
+          altMethod,
           eventId: id,
           quantity: quantity
         })
@@ -213,6 +220,45 @@ export default function PurchasePage({ params }: { params: Promise<{ id: string 
     }
   }
 
+  // Start an alternate payment method flow
+  const startAltPayment = async (method: "alipay" | "wechat" | "applepay") => {
+    if (method === "applepay") {
+      // Apple Pay is device-restricted; show a message if not supported
+      const supported = typeof window !== 'undefined' && (window as any).ApplePaySession
+      if (!supported) {
+        toast({ title: 'Apple Pay Unavailable', description: 'Apple Pay is not supported on this device.' })
+        return
+      }
+      // For demo, we still show unavailable to avoid implementing the full sheet
+      toast({ title: 'Apple Pay', description: 'Apple Pay flow is not available in this demo.' })
+      return
+    }
+    // QR-based methods (Alipay / WeChat)
+    try {
+      setAltMethod(method)
+      const payment = {
+        type: 'PAYMENT_QR',
+        method,
+        amount_usd: event ? Number((event.price_usd * quantity + 6).toFixed(2)) : 0,
+        event_id: event?.id,
+        event_name: event?.name,
+        to_wallet: address,
+        ts: Date.now()
+      }
+      const url = await QRCode.toDataURL(JSON.stringify(payment), {
+        width: 220,
+        margin: 2,
+        color: { dark: '#0f172a', light: '#ffffff' },
+        errorCorrectionLevel: 'M'
+      })
+      setQrDataUrl(url)
+      setQrOpen(true)
+    } catch (e) {
+      console.error('Failed generating payment QR', e)
+      toast({ title: 'QR error', description: 'Could not generate payment code', variant: 'destructive' })
+    }
+  }
+
   const handleRetry = () => {
     console.log('🔄 Retrying purchase...')
     setPurchaseStatus("idle")
@@ -253,26 +299,68 @@ export default function PurchasePage({ params }: { params: Promise<{ id: string 
                 <CardContent className="p-6">
                   <h2 className="text-xl font-semibold text-white mb-4">Payment Method</h2>
 
-                  <Tabs defaultValue="crypto" value={activeTab} onValueChange={setActiveTab} className="w-full mb-6">
-                    <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="crypto">
-                        <Wallet className="mr-2 h-4 w-4" />
-                        Crypto
-                      </TabsTrigger>
-                      <TabsTrigger value="fiat">
-                        <CreditCard className="mr-2 h-4 w-4" />
-                        Credit Card
-                      </TabsTrigger>
-                    </TabsList>
+                  <Tabs defaultValue="crypto" value={activeTab} onValueChange={setActiveTab} className="w-full mb-2">
+                    {/* Glass segmented control with sliding indicator */}
+                    <div className="relative w-full">
+                      {/* Glass background */}
+                      <div className="absolute inset-0 rounded-full backdrop-blur-xl bg-white/10 border border-white/20 shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]" />
+                      {/* Sliding pill for 3 options */}
+                      <div
+                        className="absolute top-1 bottom-1 left-1 w-1/3 rounded-full bg-white/20 shadow-lg transition-transform duration-300 ease-out"
+                        style={{ transform: `translateX(${activeTab === 'crypto' ? 0 : activeTab === 'fiat' ? 100 : 200}%)` }}
+                      />
+                      <TabsList className="relative grid w-full grid-cols-3 bg-transparent p-1 h-12 text-slate-200">
+                        <TabsTrigger
+                          value="crypto"
+                          className="relative z-10 rounded-full h-10 data-[state=active]:text-white"
+                        >
+                          <Wallet className="mr-2 h-4 w-4" />
+                          Crypto
+                        </TabsTrigger>
+                        <TabsTrigger
+                          value="fiat"
+                          className="relative z-10 rounded-full h-10 data-[state=active]:text-white"
+                        >
+                          <CreditCard className="mr-2 h-4 w-4" />
+                          Credit Card
+                        </TabsTrigger>
+                        <TabsTrigger
+                          value="other"
+                          className="relative z-10 rounded-full h-10 data-[state=active]:text-white"
+                        >
+                          Other
+                        </TabsTrigger>
+                      </TabsList>
+                    </div>
+                    {/* Other methods tab */}
+                    <TabsContent value="other" className="mt-4">
+                      <div className="p-4 bg-slate-900/70 backdrop-blur-sm rounded-lg border border-white/10">
+                        <div className="text-slate-300 text-sm mb-3">Select a method</div>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <Button onClick={() => startAltPayment('alipay')} className="bg-white/10 border border-white/20 backdrop-blur-md text-white hover:bg-white/15">
+                            <img src="/alipay.png" alt="Alipay" className="h-5 w-auto mr-2" onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
+                            Alipay (QR)
+                          </Button>
+                          <Button onClick={() => startAltPayment('wechat')} className="bg-white/10 border border-white/20 backdrop-blur-md text-white hover:bg-white/15">
+                            <img src="/wechatpay.png" alt="WeChat Pay" className="h-5 w-auto mr-2" onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
+                            WeChat Pay (QR)
+                          </Button>
+                          <Button onClick={() => startAltPayment('applepay')} className="bg-white/10 border border-white/20 backdrop-blur-md text-white hover:bg-white/15">
+                            <img src="/applepay.png" alt="Apple Pay" className="h-5 w-auto mr-2" onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
+                            Apple Pay
+                          </Button>
+                        </div>
+                      </div>
+                    </TabsContent>
 
                     <TabsContent value="crypto" className="mt-4">
                       <div className="space-y-4">
-                        <div className="p-4 bg-slate-900 rounded-lg">
+                        <div className="p-4 bg-slate-900/70 backdrop-blur-sm rounded-lg border border-white/10">
                           <div className="text-sm text-slate-400 mb-1">Connected Wallet</div>
                           <div className="text-slate-200 font-mono">{address}</div>
                         </div>
 
-                        <div className="p-4 bg-slate-900 rounded-lg">
+                        <div className="p-4 bg-slate-900/70 backdrop-blur-sm rounded-lg border border-white/10">
                           <div className="text-sm text-slate-400 mb-1">Network</div>
                           <div className="text-slate-200">Ethereum Sepolia (Testnet)</div>
                           <div className="text-xs text-slate-500 mt-1">Gas fees covered by relayer</div>
@@ -291,7 +379,7 @@ export default function PurchasePage({ params }: { params: Promise<{ id: string 
                   <Button
                     className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 disabled:opacity-50"
                     onClick={handlePurchase}
-                    disabled={activeTab === "fiat" && !creditCardValid}
+                    disabled={(activeTab === "fiat" && !creditCardValid)}
                   >
                     {activeTab === "fiat" && !creditCardValid 
                       ? "Please Complete Payment Details" 
@@ -300,9 +388,9 @@ export default function PurchasePage({ params }: { params: Promise<{ id: string 
                   </Button>
                 </CardContent>
               </Card>
-            ) : (
-              <Card className="bg-slate-800 border-slate-700">
-                <CardContent className="p-6">
+          ) : (
+            <Card className="bg-slate-800 border-slate-700">
+              <CardContent className="p-6">
                   <div className="text-center py-8">
                     {purchaseStatus === "processing" && (
                       <>
@@ -464,6 +552,47 @@ export default function PurchasePage({ params }: { params: Promise<{ id: string 
           </div>
         </div>
       </div>
+
+      {/* QR Modal for Alipay / WeChat */}
+      <Dialog open={qrOpen} onOpenChange={setQrOpen}>
+        <DialogContent className="bg-slate-900 border-slate-700">
+          <DialogHeader>
+            <DialogTitle className="text-white flex items-center">
+              <QrCode className="h-5 w-5 mr-2 text-purple-400" />
+              {altMethod === 'alipay' ? 'Alipay' : altMethod === 'wechat' ? 'WeChat Pay' : 'Payment'} QR Code
+            </DialogTitle>
+            <DialogDescription className="text-slate-400">
+              Scan this code in your {altMethod === 'alipay' ? 'Alipay' : 'WeChat'} app to complete the payment. Then return to finalize your order.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col items-center gap-4 py-2">
+            {qrDataUrl ? (
+              <div className="p-3 bg-white rounded-md">
+                <img src={qrDataUrl} alt="Payment QR" className="h-48 w-48" />
+              </div>
+            ) : (
+              <div className="h-48 w-48 bg-slate-800 rounded-md animate-pulse" />
+            )}
+            <div className="text-slate-400 text-sm">Amount: ${event ? (event.price_usd * quantity + 6).toFixed(2) : '0.00'}</div>
+            <div className="flex gap-3 w-full">
+              <Button
+                className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
+                onClick={async () => {
+                  setQrOpen(false)
+                  // Proceed as fiat after external payment
+                  setActiveTab('fiat')
+                  await handlePurchase()
+                }}
+              >
+                I have paid
+              </Button>
+              <Button variant="ghost" className="flex-1 text-slate-300 hover:text-white" onClick={() => setQrOpen(false)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
