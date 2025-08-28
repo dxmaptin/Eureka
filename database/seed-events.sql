@@ -12,7 +12,7 @@ INSERT INTO events (id, name, description, date, time, location, category, price
   'Conference',
   450.00,
   0.15,
-  '/placeholder.svg?height=400&width=600',
+  '/conference.jpeg',
   200,
   156
 ),
@@ -26,7 +26,7 @@ INSERT INTO events (id, name, description, date, time, location, category, price
   'Exhibition',
   240.00,
   0.08,
-  '/placeholder.svg?height=400&width=600',
+  '/NFTartexhibition.jpeg',
   150,
   89
 ),
@@ -40,7 +40,7 @@ INSERT INTO events (id, name, description, date, time, location, category, price
   'Festival',
   750.00,
   0.25,
-  '/placeholder.svg?height=400&width=600',
+  '/cypher.png',
   500,
   412
 ),
@@ -54,7 +54,7 @@ INSERT INTO events (id, name, description, date, time, location, category, price
   'Conference',
   360.00,
   0.12,
-  '/placeholder.svg?height=400&width=600',
+  '/defi.jpeg',
   300,
   78
 ),
@@ -68,7 +68,7 @@ INSERT INTO events (id, name, description, date, time, location, category, price
   'Concert',
   540.00,
   0.18,
-  '/placeholder.svg?height=400&width=600',
+  '/metaverse.jpg',
   400,
   245
 ),
@@ -82,7 +82,7 @@ INSERT INTO events (id, name, description, date, time, location, category, price
   'Gaming',
   150.00,
   0.05,
-  '/placeholder.svg?height=400&width=600',
+  '/gaming.jpeg',
   250,
   120
 );

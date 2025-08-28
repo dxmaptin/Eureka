@@ -9,3 +9,23 @@
 
  ✓ Starting...
  ✓ Ready in 2.5s
+ ○ Compiling /api/events ...
+ ✓ Compiled /api/events in 2.5s (432 modules)
+📅 Fetching events from database...
+✅ Found 6 events
+ GET /api/events 200 in 4032ms
+ ✓ Compiled in 472ms (156 modules)
+ ✓ Compiled in 246ms (156 modules)
+ ✓ Compiled in 310ms (276 modules)
+   Reload env: .env.local
+ ✓ Compiled in 1992ms (276 modules)
+ ○ Compiling /api/admin/fix-event-images ...
+ ✓ Compiled /api/admin/fix-event-images in 1435ms (431 modules)
+ POST /api/admin/fix-event-images 200 in 2918ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/dxma/Desktop/Eureka/.next/cache/webpack/server-development/0.pack.gz_' -> '/Users/dxma/Desktop/Eureka/.next/cache/webpack/server-development/0.pack.gz'
+ ○ Compiling / ...
+ ✓ Compiled / in 8.5s (1664 modules)
+🔍 Magic: Running on server side, skipping initialization
+ HEAD / 200 in 9446ms
+ ✓ Compiled in 1252ms (762 modules)
+[?25h

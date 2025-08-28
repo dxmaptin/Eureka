@@ -10,6 +10,15 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  /* Animated gradient utility for radiant borders */
+  @keyframes gradient-x {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-x 6s ease infinite;
+  }
 }
 
 @layer base {

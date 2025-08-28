@@ -9,6 +9,7 @@ import { useWallet } from "@/context/wallet-context"
 import { useToast } from "@/components/ui/use-toast"
 import { ethers } from "ethers"
 import type { Event, Listing } from "@/lib/supabase"
+import { getEventImage } from "@/lib/event-images"
 import { Price } from "@/components/price"
 import MarketplaceAbi from "@/lib/abis/SimpleRoyaltyMarketplace.json"
 import { MARKETPLACE_CONTRACT_ADDRESS, MYNFT_CONTRACT_ADDRESS } from "@/lib/contracts"
@@ -131,7 +132,7 @@ export default function EventMarketplacePage({ params }: { params: Promise<{ id:
             {listings.map((l) => (
               <Card key={l.id} className="bg-slate-800 border-slate-700 overflow-hidden">
                 <div className="relative h-40 w-full">
-                  <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${event.image_url})` }} />
+                  <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${getEventImage(event)})` }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
                   <div className="absolute bottom-3 left-3 right-3 text-white font-semibold text-lg">
                     #{l.token_id}

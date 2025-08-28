@@ -58,17 +58,22 @@ export class DatabaseService {
 
   // Event Management
   static async getAllEvents(): Promise<Event[]> {
-    const { data, error } = await supabase
-      .from('events')
-      .select('*')
-      .order('date', { ascending: true })
+    try {
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .order('date', { ascending: true })
 
-    if (error) {
-      console.error('❌ Error fetching events:', error)
+      if (error) {
+        console.error('❌ Error fetching events:', error)
+        return []
+      }
+
+      return data || []
+    } catch (e) {
+      console.error('❌ Network error fetching events:', e)
       return []
     }
-
-    return data || []
   }
 
   static async getEventById(eventId: string): Promise<Event | null> {

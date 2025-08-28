@@ -21,7 +21,8 @@ export const supabaseAdmin = (() => {
   
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!supabaseServiceKey) {
-    throw new Error('SUPABASE_SERVICE_ROLE_KEY is required for server-side operations')
+    console.warn('SUPABASE_SERVICE_ROLE_KEY not set; admin operations will be disabled')
+    return null
   }
   
   return createClient(supabaseUrl, supabaseServiceKey, {

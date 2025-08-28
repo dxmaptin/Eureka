@@ -12,6 +12,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { CalendarDays, Clock, MapPin, Ticket, Users, ChevronRight, Info, Share2, Loader2 } from "lucide-react"
 import { Price } from "@/components/price"
 import type { Event } from "@/lib/supabase"
+import { getEventImage } from "@/lib/event-images"
 
 export default function EventPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
@@ -111,7 +112,7 @@ export default function EventPage({ params }: { params: Promise<{ id: string }> 
           {/* Event Details - Left Column */}
           <div className="lg:col-span-2">
             <div className="relative h-64 md:h-96 w-full rounded-lg overflow-hidden mb-6">
-              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${event.image_url})` }} />
+              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${getEventImage(event)})` }} />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
               <div className="absolute bottom-4 left-4">
                 <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-medium">
