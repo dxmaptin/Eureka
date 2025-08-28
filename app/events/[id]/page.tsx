@@ -120,7 +120,13 @@ export default function EventPage({ params }: { params: Promise<{ id: string }> 
               </div>
             </div>
 
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">{event.name}</h1>
+            <div className="flex items-center justify-between mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-white">{event.name}</h1>
+              <Button variant="outline" className="border-slate-600" onClick={handleShare}>
+                <Share2 className="mr-2 h-4 w-4" />
+                Share Event
+              </Button>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div className="flex items-center text-slate-300">
@@ -257,9 +263,14 @@ export default function EventPage({ params }: { params: Promise<{ id: string }> 
                   <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
 
-                <Button variant="outline" className="w-full mt-2 border-slate-600" onClick={handleShare}>
-                  <Share2 className="mr-2 h-4 w-4" />
-                  Share Event
+                <Button
+                  className="w-full mt-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-600 hover:to-teal-600"
+                  onClick={async () => {
+                    const { id } = await params
+                    router.push(`/events/${id}/marketplace`)
+                  }}
+                >
+                  Open Marketplace
                 </Button>
 
                 <div className="mt-4 text-xs text-slate-400 text-center">
@@ -275,4 +286,3 @@ export default function EventPage({ params }: { params: Promise<{ id: string }> 
     </div>
   )
 }
-

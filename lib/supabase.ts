@@ -70,6 +70,7 @@ export interface Ticket {
   transaction_hash: string
   purchase_price_usd?: number
   purchase_price_eth?: number
+  last_purchase_price_eth?: number
   payment_method: 'crypto' | 'fiat'
   metadata_uri: string
   purchased_at: string
@@ -91,4 +92,21 @@ export interface PurchaseHistory {
   // Joined data
   event?: Event
   ticket?: Ticket
+}
+
+export interface Listing {
+  id: string
+  event_id: string
+  ticket_id: string
+  nft_address: string
+  token_id: number
+  seller_id: string
+  price_eth: number
+  status: 'active' | 'sold' | 'cancelled'
+  tx_hash?: string
+  created_at: string
+  updated_at: string
+  // Joined data
+  ticket?: Ticket
+  event?: Event
 }

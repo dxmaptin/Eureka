@@ -1,5 +1,5 @@
 import { supabase, supabaseAdmin } from './supabase'
-import type { User, Event, Ticket, PurchaseHistory } from './supabase'
+import type { User, Event, Ticket, PurchaseHistory, Listing } from './supabase'
 
 export class DatabaseService {
   // User Management
@@ -109,6 +109,7 @@ export class DatabaseService {
     transaction_hash: string
     purchase_price_usd?: number
     purchase_price_eth?: number
+    last_purchase_price_eth?: number
     payment_method: 'crypto' | 'fiat'
     metadata_uri: string
   }): Promise<Ticket | null> {
@@ -121,7 +122,10 @@ export class DatabaseService {
 
     const { data, error } = await supabaseAdmin
       .from('tickets')
-      .insert([ticketData])
+      .insert([{
+        ...ticketData,
+        last_purchase_price_eth: ticketData.last_purchase_price_eth ?? ticketData.purchase_price_eth
+      }])
       .select(`
         *,
         event:events(*)
@@ -174,6 +178,74 @@ export class DatabaseService {
     return data || []
   }
 
+  // Marketplace Listings
+  static async createListing(listing: {
+    event_id: string
+    ticket_id: string
+    nft_address: string
+    token_id: number
+    seller_id: string
+    price_eth: number
+    tx_hash?: string
+  }): Promise<Listing | null> {
+    const { data, error } = await supabase
+      .from('marketplace_listings')
+      .insert([{ ...listing, status: 'active' }])
+      .select(`*, event:events(*), ticket:tickets(*)`)
+      .single()
+
+    if (error) {
+      console.error('❌ Error creating listing:', error)
+      return null
+    }
+    return data
+  }
+
+  static async cancelListing(nftAddress: string, tokenId: number): Promise<boolean> {
+    const { error } = await supabase
+      .from('marketplace_listings')
+      .update({ status: 'cancelled', updated_at: new Date().toISOString() })
+      .eq('nft_address', nftAddress)
+      .eq('token_id', tokenId)
+      .eq('status', 'active')
+
+    if (error) {
+      console.error('❌ Error cancelling listing:', error)
+      return false
+    }
+    return true
+  }
+
+  static async markListingSold(nftAddress: string, tokenId: number, buyerId: string, txHash?: string): Promise<boolean> {
+    const { error } = await supabase
+      .from('marketplace_listings')
+      .update({ status: 'sold', updated_at: new Date().toISOString(), tx_hash: txHash })
+      .eq('nft_address', nftAddress)
+      .eq('token_id', tokenId)
+      .eq('status', 'active')
+
+    if (error) {
+      console.error('❌ Error marking listing sold:', error)
+      return false
+    }
+    return true
+  }
+
+  static async getActiveListingsByEvent(eventId: string): Promise<Listing[]> {
+    const { data, error } = await supabase
+      .from('marketplace_listings')
+      .select(`*, event:events(*), ticket:tickets(*)`)
+      .eq('event_id', eventId)
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error('❌ Error fetching listings:', error)
+      return []
+    }
+    return data || []
+  }
+
   static async transferTicket(ticketId: string, newOwnerId: string): Promise<boolean> {
     const { error } = await supabase
       .from('tickets')
@@ -185,6 +257,19 @@ export class DatabaseService {
       return false
     }
 
+    return true
+  }
+
+  static async updateTicketAfterResale(ticketId: string, newOwnerId: string, newPriceEth: number): Promise<boolean> {
+    const { error } = await supabase
+      .from('tickets')
+      .update({ owner_id: newOwnerId, last_purchase_price_eth: newPriceEth, updated_at: new Date().toISOString() })
+      .eq('id', ticketId)
+
+    if (error) {
+      console.error('❌ Error updating ticket after resale:', error)
+      return false
+    }
     return true
   }
 

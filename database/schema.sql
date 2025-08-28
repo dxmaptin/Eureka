@@ -47,6 +47,8 @@ CREATE TABLE tickets (
   transaction_hash TEXT NOT NULL,
   purchase_price_usd DECIMAL(10,2),
   purchase_price_eth DECIMAL(18,8),
+  -- Tracks the most recent purchase price to enforce 2x cap client-side
+  last_purchase_price_eth DECIMAL(18,8),
   payment_method TEXT NOT NULL CHECK (payment_method IN ('crypto', 'fiat')),
   metadata_uri TEXT NOT NULL,
   purchased_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -78,6 +80,26 @@ CREATE INDEX idx_tickets_event_id ON tickets(event_id);
 CREATE INDEX idx_tickets_transaction_hash ON tickets(transaction_hash);
 CREATE INDEX idx_purchase_history_user_id ON purchase_history(user_id);
 CREATE INDEX idx_purchase_history_created_at ON purchase_history(created_at);
+
+-- Secondary marketplace listings
+CREATE TABLE marketplace_listings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_id UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+  ticket_id UUID NOT NULL REFERENCES tickets(id) ON DELETE CASCADE,
+  nft_address TEXT NOT NULL,
+  token_id INTEGER NOT NULL,
+  seller_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  price_eth DECIMAL(18,8) NOT NULL,
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','sold','cancelled')),
+  tx_hash TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(nft_address, token_id)
+);
+
+CREATE INDEX idx_marketplace_listings_event ON marketplace_listings(event_id);
+CREATE INDEX idx_marketplace_listings_status ON marketplace_listings(status);
+CREATE INDEX idx_marketplace_listings_seller ON marketplace_listings(seller_id);
 
 -- Create updated_at trigger function
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -129,6 +151,7 @@ ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tickets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE purchase_history ENABLE ROW LEVEL SECURITY;
+ALTER TABLE marketplace_listings ENABLE ROW LEVEL SECURITY;
 
 -- Users can read all users (for display purposes) but only update their own
 CREATE POLICY "Users can view all users" ON users FOR SELECT USING (true);
@@ -154,3 +177,10 @@ CREATE POLICY "Users can view own purchase history" ON purchase_history FOR SELE
   current_setting('app.current_user_role', true) = 'admin'
 );
 CREATE POLICY "Anyone can create purchase records" ON purchase_history FOR INSERT WITH CHECK (true);
+
+-- Listings policies: public read, only seller can modify their own listing
+CREATE POLICY "Listings are publicly viewable" ON marketplace_listings FOR SELECT USING (true);
+CREATE POLICY "Sellers can create listings" ON marketplace_listings FOR INSERT WITH CHECK (true);
+CREATE POLICY "Sellers can update own listings" ON marketplace_listings FOR UPDATE USING (
+  seller_id::text = current_setting('app.current_user_id', true)
+);

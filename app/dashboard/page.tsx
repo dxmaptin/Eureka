@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useWallet } from "@/context/wallet-context"
-import { CalendarDays, Clock, MapPin, Ticket, Loader2, ExternalLink, User, QrCode } from "lucide-react"
+import { CalendarDays, Clock, MapPin, Ticket, Loader2, ExternalLink, User, QrCode, Tag } from "lucide-react"
 import { Price } from "@/components/price"
 import Link from "next/link"
 import type { Ticket, User as DatabaseUser, PurchaseHistory } from "@/lib/supabase"
@@ -18,6 +18,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import MarketplaceAbi from "@/lib/abis/SimpleRoyaltyMarketplace.json"
+import ERC721Abi from "@/lib/abis/ERC721.json"
+import { MARKETPLACE_CONTRACT_ADDRESS, MYNFT_CONTRACT_ADDRESS } from "@/lib/contracts"
+import { ethers } from "ethers"
+import { useToast } from "@/components/ui/use-toast"
 
 interface UserData {
   user: DatabaseUser
@@ -31,6 +37,10 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedTicketForQR, setSelectedTicketForQR] = useState<Ticket | null>(null)
+  const [listingTicket, setListingTicket] = useState<Ticket | null>(null)
+  const [listingPriceEth, setListingPriceEth] = useState<string>("")
+  const [listingBusy, setListingBusy] = useState(false)
+  const { toast } = useToast()
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -223,6 +233,103 @@ export default function Dashboard() {
                                     tokenId={ticket.token_id}
                                     ownerAddress={address || ''}
                                   />
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+                            {/* List for resale */}
+                            <Dialog open={listingTicket?.id === ticket.id} onOpenChange={(open) => { if (!open) { setListingTicket(null); setListingBusy(false); } }}>
+                              <DialogTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="border-slate-600 hover:bg-slate-700"
+                                  onClick={() => {
+                                    setListingTicket(ticket)
+                                    const base = ticket.last_purchase_price_eth ?? ticket.purchase_price_eth ?? ticket.event?.price_eth ?? 0
+                                    setListingPriceEth(String(base))
+                                  }}
+                                >
+                                  <Tag className="h-4 w-4 mr-1" />
+                                  List
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="sm:max-w-md bg-slate-900 border-slate-700">
+                                <DialogHeader>
+                                  <DialogTitle className="text-white">List Ticket #{ticket.token_id}</DialogTitle>
+                                  <DialogDescription className="text-slate-400">
+                                    Set your resale price. Cap: up to 2x your last purchase price.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <div className="space-y-3">
+                                  <div className="text-sm text-slate-300">Last price: {(ticket.last_purchase_price_eth ?? ticket.purchase_price_eth ?? ticket.event?.price_eth)?.toString()} ETH</div>
+                                  <Input
+                                    type="number"
+                                    step="0.0001"
+                                    min={0}
+                                    value={listingPriceEth}
+                                    onChange={(e) => setListingPriceEth(e.target.value)}
+                                    placeholder="Price in ETH"
+                                    className="bg-slate-800 border-slate-700 text-white"
+                                  />
+                                  <Button
+                                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
+                                    disabled={listingBusy}
+                                    onClick={async () => {
+                                      if (!address || !dbUser) { toast({ title: 'Not signed in', description: 'Connect wallet to list.', variant: 'destructive' }); return }
+                                      if (!MARKETPLACE_CONTRACT_ADDRESS || !MYNFT_CONTRACT_ADDRESS) {
+                                        toast({ title: 'Missing config', description: 'Contract addresses not set.', variant: 'destructive' })
+                                        return
+                                      }
+                                      const base = Number(ticket.last_purchase_price_eth ?? ticket.purchase_price_eth ?? ticket.event?.price_eth ?? 0)
+                                      const priceNum = Number(listingPriceEth || 0)
+                                      if (!priceNum || priceNum <= 0) { toast({ title: 'Invalid price', description: 'Enter a price in ETH.', variant: 'destructive' }); return }
+                                      if (base && priceNum > base * 2) { toast({ title: 'Over cap', description: `Max allowed: ${(base*2).toFixed(4)} ETH`, variant: 'destructive' }); return }
+                                      try {
+                                        setListingBusy(true)
+                                        // @ts-ignore
+                                        const provider = new ethers.BrowserProvider(window.ethereum)
+                                        const signer = await provider.getSigner()
+                                        const erc721 = new ethers.Contract(MYNFT_CONTRACT_ADDRESS, (ERC721Abi as any).abi, signer)
+                                        const approved = await erc721.isApprovedForAll(address, MARKETPLACE_CONTRACT_ADDRESS)
+                                        if (!approved) {
+                                          const txA = await erc721.setApprovalForAll(MARKETPLACE_CONTRACT_ADDRESS, true)
+                                          await txA.wait()
+                                        }
+                                        const marketplace = new ethers.Contract(MARKETPLACE_CONTRACT_ADDRESS, (MarketplaceAbi as any).abi, signer)
+                                        const priceWei = ethers.parseEther(String(listingPriceEth || '0'))
+                                        const tx = await marketplace.list(MYNFT_CONTRACT_ADDRESS, ticket.token_id, priceWei)
+                                        const receipt = await tx.wait()
+                                        // Record listing in DB
+                                        const res = await fetch('/api/marketplace/list', {
+                                          method: 'POST',
+                                          headers: { 'Content-Type': 'application/json' },
+                                          body: JSON.stringify({
+                                            event_id: ticket.event_id,
+                                            ticket_id: ticket.id,
+                                            nft_address: MYNFT_CONTRACT_ADDRESS,
+                                            token_id: ticket.token_id,
+                                            seller_id: dbUser.id,
+                                            price_eth: Number(listingPriceEth),
+                                            tx_hash: receipt?.hash
+                                          })
+                                        })
+                                        const data = await res.json()
+                                        if (!data.success) {
+                                          toast({ title: 'Listed on-chain', description: 'DB record failed, but your listing is live.', variant: 'default' })
+                                        } else {
+                                          toast({ title: 'Listed', description: `Ticket #${ticket.token_id} listed at ${priceNum} ETH.` })
+                                        }
+                                        setListingTicket(null)
+                                        setListingBusy(false)
+                                      } catch (e: any) {
+                                        console.error('List failed', e)
+                                        toast({ title: 'Listing failed', description: e?.message || 'Transaction error', variant: 'destructive' })
+                                        setListingBusy(false)
+                                      }
+                                    }}
+                                  >
+                                    {listingBusy ? <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Listing...</> : 'Confirm Listing'}
+                                  </Button>
                                 </div>
                               </DialogContent>
                             </Dialog>

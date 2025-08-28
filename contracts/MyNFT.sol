@@ -9,6 +9,8 @@ import "@openzeppelin/contracts/interfaces/IERC4906.sol";
 contract MyNFT is ERC721URIStorage, ERC2981, Ownable {
     uint256 private _tokenIdCounter;
     uint256 public mintPrice = 0;
+    // Official marketplace allowed to transfer tickets
+    address public marketplace;
 
     // Pass msg.sender as the initial owner to Ownable constructor
     constructor() ERC721("MyNFTCollection", "MNC") Ownable(msg.sender) {
@@ -37,6 +39,25 @@ contract MyNFT is ERC721URIStorage, ERC2981, Ownable {
     {
         return interfaceId == type(IERC4906).interfaceId || // ERC4906 interface ID
                super.supportsInterface(interfaceId);
+    }
+
+    // Set the official marketplace allowed to transfer tickets
+    function setMarketplace(address m) external onlyOwner {
+        marketplace = m;
+    }
+
+    // Override transfer logic to require marketplace (or owner) for transfers
+    function _update(address to, uint256 tokenId, address auth)
+        internal
+        override(ERC721, ERC721URIStorage)
+        returns (address from)
+    {
+        bool isMint = _ownerOf(tokenId) == address(0);
+        bool isBurn = to == address(0);
+        if (!isMint && !isBurn) {
+            require(msg.sender == marketplace || msg.sender == owner(), "Transfers via marketplace only");
+        }
+        return super._update(to, tokenId, auth);
     }
 
     function setRoyaltyInfo(address receiver, uint96 feeNumerator) external onlyOwner {

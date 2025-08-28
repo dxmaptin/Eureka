@@ -2,6 +2,8 @@ import { ethers } from 'ethers'
 import { NextRequest, NextResponse } from 'next/server'
 import MyNFTAbi from '@/artifacts/contracts/MyNFT.sol/MyNFT.json'
 import { DatabaseService } from '@/lib/database'
+import MarketplaceAbi from '@/lib/abis/SimpleRoyaltyMarketplace.json'
+import { MARKETPLACE_CONTRACT_ADDRESS } from '@/lib/contracts'
 
 const RELAYER_PRIVATE_KEY = process.env.RELAYER_PRIVATE_KEY
 const RELAYER_ADDRESS = process.env.RELAYER_ADDRESS
@@ -134,6 +136,9 @@ export async function POST(request: NextRequest): Promise<NextResponse<MintRespo
 
     console.log('🎨 NFT minted with token ID:', tokenId)
 
+    // Fetch event for pricing
+    const event = await DatabaseService.getEventById(eventId)
+
     // Create/update user in database
     console.log('👤 Creating/updating user in database...')
     const dbUser = await DatabaseService.createOrUpdateUser({
@@ -156,6 +161,9 @@ export async function POST(request: NextRequest): Promise<NextResponse<MintRespo
       owner_id: dbUser.id,
       token_id: parseInt(tokenId || '0'),
       transaction_hash: tx.hash,
+      purchase_price_usd: event?.price_usd,
+      purchase_price_eth: event?.price_eth,
+      last_purchase_price_eth: event?.price_eth,
       payment_method: paymentMethod,
       metadata_uri: METADATA_URI
     })
@@ -164,6 +172,18 @@ export async function POST(request: NextRequest): Promise<NextResponse<MintRespo
       console.warn('⚠️ Failed to save ticket to database, but NFT was minted')
     } else {
       console.log('✅ Ticket saved to database:', ticketData.id)
+    }
+
+    // Record initial base price on marketplace (for 2x cap/profit split)
+    if (MARKETPLACE_CONTRACT_ADDRESS && tokenId && event?.price_eth) {
+      try {
+        const mp = new ethers.Contract(MARKETPLACE_CONTRACT_ADDRESS, (MarketplaceAbi as any).abi, relayerWallet)
+        const priceWei = ethers.parseEther(String(event.price_eth))
+        // setInitialPrice onlyOwner; ensure relayer can call only if relayer is owner of marketplace
+        await mp.setInitialPrice(MYNFT_CONTRACT_ADDRESS, BigInt(tokenId), priceWei)
+      } catch (e) {
+        console.warn('Could not set initial price on marketplace (check ownership/permissions):', e)
+      }
     }
 
     return NextResponse.json({
