@@ -2,8 +2,8 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import Header from "@/components/header"
 import Footer from "@/components/footer"
+import TopRightBar from "@/components/top-right-bar"
 import { WalletProvider } from "@/context/wallet-context"
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -29,7 +29,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <WalletProvider>
             <div className="flex flex-col min-h-screen">
-              <Header />
+              <TopRightBar />
               <main className="flex-grow">{children}</main>
               <Footer />
             </div>

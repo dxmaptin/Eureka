@@ -13,6 +13,7 @@ import MyNFTAbi from "@/artifacts/contracts/MyNFT.sol/MyNFT.json"
 import { Price } from "@/components/price"
 import { CreditCardForm, CreditCardData } from "@/components/credit-card-form"
 import type { Event } from "@/lib/supabase"
+import EventHeader from "@/components/event-header"
 
 export default function PurchasePage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
@@ -234,6 +235,8 @@ export default function PurchasePage({ params }: { params: Promise<{ id: string 
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
+      <EventHeader />
+      <div className="h-24"></div>
       <div className="container mx-auto px-4 py-8">
         <Button variant="ghost" className="mb-6 text-slate-300" onClick={handleBack}>
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -464,4 +467,3 @@ export default function PurchasePage({ params }: { params: Promise<{ id: string 
     </div>
   )
 }
-

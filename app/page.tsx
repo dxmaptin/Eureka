@@ -13,6 +13,7 @@ import { getEventImage } from "@/lib/event-images"
 import type { Event } from "@/lib/supabase"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
+// profile moved to a top-right sticky bar
 
 export default function Home() {
   const [events, setEvents] = useState<Event[]>([])
@@ -22,6 +23,7 @@ export default function Home() {
   const [appliedQuery, setAppliedQuery] = useState("")
   const router = useRouter()
   const { toast } = useToast()
+  const [compact, setCompact] = useState(false)
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -46,12 +48,29 @@ export default function Home() {
     
     fetchEvents()
   }, [])
+
+  // Shrink sticky search bar on scroll
+  useEffect(() => {
+    const onScroll = () => setCompact(window.scrollY > 100)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
   const filteredEvents = useMemo(() => {
     const q = appliedQuery.trim().toLowerCase()
-    if (!q) return events
-    return events.filter((e) =>
-      [e.name, e.category, e.location].some((f) => f?.toLowerCase().includes(q))
-    )
+    const base = q
+      ? events.filter((e) => [e.name, e.category, e.location].some((f) => f?.toLowerCase().includes(q)))
+      : events
+
+    // Swap order of Metaverse Concert and Web3 Music Festival
+    const list = [...base]
+    const i = list.findIndex((e) => e.name === 'Metaverse Concert')
+    const j = list.findIndex((e) => e.name === 'Web3 Music Festival')
+    if (i !== -1 && j !== -1) {
+      const tmp = list[i]
+      list[i] = list[j]
+      list[j] = tmp
+    }
+    return list
   }, [events, appliedQuery])
 
   const onSubmit = (e: React.FormEvent) => {
@@ -113,23 +132,30 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
-      <div className="container mx-auto px-4 py-8 pb-24 pt-28">
-        <div className="mt-12 md:mt-16 lg:mt-20 mb-12 flex justify-center">
+      <div className="container mx-auto px-4 py-8 pb-24 pt-8">
+        {/* Top spacing and big wordmark (letters only) */}
+        <div className="mt-10 md:mt-16 lg:mt-20 mb-6 text-center">
+          <span className="text-5xl md:text-6xl lg:text-7xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-300 via-pink-400 to-cyan-300">
+            Eureka
+          </span>
+        </div>
+
+        <div className="mb-12 flex justify-center sticky top-4 z-40">
           <form onSubmit={onSubmit} className="w-full max-w-3xl">
-            <div className="relative rounded-full p-[2px] bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 animate-gradient shadow-[0_0_30px_rgba(168,85,247,0.25)]">
+            <div className={`relative rounded-full p-[2px] bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 animate-gradient ${compact ? 'shadow-[0_0_18px_rgba(168,85,247,0.18)]' : 'shadow-[0_0_30px_rgba(168,85,247,0.25)]'}`}>
               <div className="relative">
                 <SearchIcon className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                 <Input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search for events, or ask any question"
-                  className="h-16 rounded-full pl-12 pr-16 text-lg md:text-xl bg-white/95 dark:bg-slate-900/90 border-0 focus-visible:ring-2 focus-visible:ring-purple-500"
+                  className={`${compact ? 'h-12 text-lg bg-white/70 dark:bg-slate-900/60' : 'h-16 text-xl bg-white/95 dark:bg-slate-900/90'} rounded-full pl-12 pr-40 border-0 focus-visible:ring-2 focus-visible:ring-purple-500`}
                 />
                 <div className="absolute right-2 top-1/2 -translate-y-1/2 flex gap-2">
                   <button
                     type="submit"
                     aria-label="Search"
-                    className="inline-flex items-center justify-center h-11 px-5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow hover:from-purple-600 hover:to-pink-600"
+                    className={`inline-flex items-center justify-center ${compact ? 'h-10' : 'h-11'} px-5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow hover:from-purple-600 hover:to-pink-600`}
                   >
                     <SearchIcon className="h-5 w-5 mr-2" />
                     Search
@@ -138,7 +164,7 @@ export default function Home() {
                     type="button"
                     onClick={handleAsk}
                     aria-label="Ask"
-                    className="inline-flex items-center justify-center h-11 px-5 rounded-full bg-slate-900 text-white border border-slate-700 hover:bg-slate-800"
+                    className={`inline-flex items-center justify-center ${compact ? 'h-10' : 'h-11'} px-5 rounded-full bg-slate-900/90 text-white border border-slate-700 hover:bg-slate-800`}
                   >
                     <Bot className="h-5 w-5 mr-2" />
                     Ask

@@ -12,6 +12,7 @@ import type { Event, Listing } from "@/lib/supabase"
 import { getEventImage } from "@/lib/event-images"
 import { Price } from "@/components/price"
 import MarketplaceAbi from "@/lib/abis/SimpleRoyaltyMarketplace.json"
+import EventHeader from "@/components/event-header"
 import { MARKETPLACE_CONTRACT_ADDRESS, MYNFT_CONTRACT_ADDRESS } from "@/lib/contracts"
 
 export default function EventMarketplacePage({ params }: { params: Promise<{ id: string }> }) {
@@ -112,6 +113,7 @@ export default function EventMarketplacePage({ params }: { params: Promise<{ id:
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
+      <EventHeader />
       <div className="container mx-auto px-4 py-8 pt-28">
         <Button variant="ghost" className="mb-6 text-slate-300" onClick={handleBack}>
           <ArrowLeft className="mr-2 h-4 w-4" />

@@ -13,6 +13,7 @@ import { CalendarDays, Clock, MapPin, Ticket, Users, ChevronRight, Info, Share2,
 import { Price } from "@/components/price"
 import type { Event } from "@/lib/supabase"
 import { getEventImage } from "@/lib/event-images"
+import EventHeader from "@/components/event-header"
 
 export default function EventPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
@@ -105,6 +106,7 @@ export default function EventPage({ params }: { params: Promise<{ id: string }> 
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
+      <EventHeader />
       {/* Invisible navbar spacer */}
       <div className="h-24 w-full"></div>
       <div className="container mx-auto px-4 py-8">
