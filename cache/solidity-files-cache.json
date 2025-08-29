@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/dxma/Desktop/Eureka/contracts/MyNFT.sol": {
-      "lastModificationDate": 1756134801947,
-      "contentHash": "ad75155c99df80310817a222e1a52fdd",
+      "lastModificationDate": 1756472068768,
+      "contentHash": "36d05885c6034dddcf8c51a7124c1566",
       "sourceName": "contracts/MyNFT.sol",
       "solcConfig": {
         "version": "0.8.28",
@@ -1833,6 +1833,49 @@
       ],
       "artifacts": [
         "IVRFSubscriptionV2Plus"
+      ]
+    },
+    "/Users/dxma/Desktop/Eureka/contracts/Marketplace.sol": {
+      "lastModificationDate": 1756472058768,
+      "contentHash": "3357a2f2a35729b4df3c81568387f897",
+      "sourceName": "contracts/Marketplace.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
+        "@openzeppelin/contracts/token/ERC721/IERC721.sol",
+        "@openzeppelin/contracts/utils/introspection/IERC165.sol",
+        "@openzeppelin/contracts/utils/Address.sol",
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.22"
+      ],
+      "artifacts": [
+        "SimpleRoyaltyMarketplace"
       ]
     }
   }

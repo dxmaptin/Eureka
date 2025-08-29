@@ -13,13 +13,17 @@ export async function POST(request: NextRequest) {
     console.log('🎫 Fetching tickets for user:', walletAddress)
     
     // Get user from database
-    const user = await DatabaseService.getUserByWallet(walletAddress)
+    let user = await DatabaseService.getUserByWallet(walletAddress)
     
     if (!user) {
-      return NextResponse.json({
-        success: false,
-        error: 'User not found'
-      }, { status: 404 })
+      // Auto-create a user record if missing so dashboard loads after first mint/login
+      user = await DatabaseService.createOrUpdateUser({
+        wallet_address: walletAddress,
+        login_method: 'metamask'
+      })
+      if (!user) {
+        return NextResponse.json({ success: false, error: 'User not found' }, { status: 404 })
+      }
     }
     
     // Get user's tickets

@@ -3,6 +3,36 @@
     {
       "inputs": [
         { "internalType": "address", "name": "nft", "type": "address" },
+        { "internalType": "address", "name": "organizer", "type": "address" }
+      ],
+      "name": "setOrganizer",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "treasury", "type": "address" }
+      ],
+      "name": "setPlatformTreasury",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "nft", "type": "address" },
+        { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+        { "internalType": "uint256", "name": "priceWei", "type": "uint256" }
+      ],
+      "name": "setInitialPrice",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "nft", "type": "address" },
         { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
         { "internalType": "uint256", "name": "price", "type": "uint256" }
       ],
@@ -114,4 +144,3 @@
     }
   ]
 }
-

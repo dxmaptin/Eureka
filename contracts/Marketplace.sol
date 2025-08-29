@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.22;
 
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 // Note: We intentionally do not rely on ERC-2981 for secondary splits
 // because profit-sharing logic is custom for tickets.
@@ -85,10 +85,10 @@ contract SimpleRoyaltyMarketplace is ReentrancyGuard, Ownable {
     function list(address nft, uint256 tokenId, uint256 price) external nonReentrant {
         require(price > 0, "Price must be > 0");
         IERC721 token = IERC721(nft);
-        address owner = token.ownerOf(tokenId);
-        require(msg.sender == owner, "Only owner");
+        address currentOwner = token.ownerOf(tokenId);
+        require(msg.sender == currentOwner, "Only owner");
         require(
-            token.getApproved(tokenId) == address(this) || token.isApprovedForAll(owner, address(this)),
+            token.getApproved(tokenId) == address(this) || token.isApprovedForAll(currentOwner, address(this)),
             "Marketplace not approved"
         );
 
@@ -96,8 +96,8 @@ contract SimpleRoyaltyMarketplace is ReentrancyGuard, Ownable {
         require(base > 0, "Base price not set");
         require(price <= base * PRICE_CAP_MULTIPLE, "Over 2x cap");
 
-        listings[nft][tokenId] = Listing({seller: owner, price: price});
-        emit Listed(nft, tokenId, owner, price);
+        listings[nft][tokenId] = Listing({seller: currentOwner, price: price});
+        emit Listed(nft, tokenId, currentOwner, price);
     }
 
     /**
@@ -135,10 +135,10 @@ contract SimpleRoyaltyMarketplace is ReentrancyGuard, Ownable {
         require(msg.value == listing.price, "Incorrect ETH sent");
 
         IERC721 token = IERC721(nft);
-        address owner = token.ownerOf(tokenId);
-        require(owner == listing.seller, "Seller no longer owner");
+        address currentOwner = token.ownerOf(tokenId);
+        require(currentOwner == listing.seller, "Seller no longer owner");
         require(
-            token.getApproved(tokenId) == address(this) || token.isApprovedForAll(owner, address(this)),
+            token.getApproved(tokenId) == address(this) || token.isApprovedForAll(currentOwner, address(this)),
             "Marketplace not approved"
         );
         address organizer = organizerOf[nft];
@@ -157,7 +157,7 @@ contract SimpleRoyaltyMarketplace is ReentrancyGuard, Ownable {
         uint256 sellerProceeds = listing.price - organizerCut - platformCut;
 
         // Transfer the NFT to buyer
-        token.safeTransferFrom(owner, msg.sender, tokenId);
+        token.safeTransferFrom(currentOwner, msg.sender, tokenId);
 
         // Payout organizer, platform, then seller
         if (organizerCut > 0) {
@@ -169,13 +169,13 @@ contract SimpleRoyaltyMarketplace is ReentrancyGuard, Ownable {
             (bool okPlat, ) = payable(treasury).call{value: platformCut}("");
             require(okPlat, "Platform payout failed");
         }
-        (bool okSeller, ) = payable(owner).call{value: sellerProceeds}("");
+        (bool okSeller, ) = payable(currentOwner).call{value: sellerProceeds}("");
         require(okSeller, "Seller payout failed");
 
         // Update base to the new purchase price
         lastPricePaidWei[nft][tokenId] = listing.price;
 
-        emit Purchased(nft, tokenId, msg.sender, owner, listing.price, organizerCut, platformCut, sellerProceeds);
+        emit Purchased(nft, tokenId, msg.sender, currentOwner, listing.price, organizerCut, platformCut, sellerProceeds);
     }
 
     // Admin rescue: withdraw ETH accidentally sent to this contract

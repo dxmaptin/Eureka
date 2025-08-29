@@ -277,54 +277,165 @@ export default function Dashboard() {
                                     className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
                                     disabled={listingBusy}
                                     onClick={async () => {
-                                      if (!address || !dbUser) { toast({ title: 'Not signed in', description: 'Connect wallet to list.', variant: 'destructive' }); return }
+                                      console.log('🚀 LISTING BUTTON CLICKED')
+                                      console.log('📍 Debug Info:', { address, dbUser: !!dbUser, MARKETPLACE_CONTRACT_ADDRESS, MYNFT_CONTRACT_ADDRESS })
+                                      toast({ title: 'Debug', description: 'Button clicked - check console for details', variant: 'default' })
+                                      
+                                      if (!address) { 
+                                        console.log('❌ No wallet address')
+                                        toast({ title: 'Not connected', description: 'Connect your wallet first.', variant: 'destructive' })
+                                        return 
+                                      }
+                                      
+                                      if (!dbUser) { 
+                                        console.log('⚠️ User not synced with database, attempting to proceed anyway')
+                                        toast({ title: 'Warning', description: 'User not fully synced - trying anyway...', variant: 'default' })
+                                        // Don't return here, allow the transaction to proceed
+                                      }
+                                      
                                       if (!MARKETPLACE_CONTRACT_ADDRESS || !MYNFT_CONTRACT_ADDRESS) {
+                                        console.log('❌ Missing contract addresses:', { MARKETPLACE_CONTRACT_ADDRESS, MYNFT_CONTRACT_ADDRESS })
                                         toast({ title: 'Missing config', description: 'Contract addresses not set.', variant: 'destructive' })
                                         return
                                       }
+                                      
                                       const base = Number(ticket.last_purchase_price_eth ?? ticket.purchase_price_eth ?? ticket.event?.price_eth ?? 0)
                                       const priceNum = Number(listingPriceEth || 0)
-                                      if (!priceNum || priceNum <= 0) { toast({ title: 'Invalid price', description: 'Enter a price in ETH.', variant: 'destructive' }); return }
-                                      if (base && priceNum > base * 2) { toast({ title: 'Over cap', description: `Max allowed: ${(base*2).toFixed(4)} ETH`, variant: 'destructive' }); return }
+                                      console.log('💰 Price validation:', { base, priceNum, listingPriceEth })
+                                      
+                                      if (!priceNum || priceNum <= 0) { 
+                                        console.log('❌ Invalid price:', priceNum)
+                                        toast({ title: 'Invalid price', description: 'Enter a price in ETH.', variant: 'destructive' })
+                                        return 
+                                      }
+                                      
+                                      if (base && priceNum > base * 2) { 
+                                        console.log('❌ Over price cap:', { base, priceNum, cap: base * 2 })
+                                        toast({ title: 'Over cap', description: `Max allowed: ${(base*2).toFixed(4)} ETH`, variant: 'destructive' })
+                                        return 
+                                      }
+                                      
                                       try {
+                                        console.log('✅ Starting blockchain transaction...')
+                                        toast({ title: 'Starting transaction', description: 'Preparing blockchain transaction...', variant: 'default' })
                                         setListingBusy(true)
+                                        
+                                        // Check if we're on the correct network
+                                        // @ts-ignore
+                                        if (window.ethereum) {
+                                          try {
+                                            const chainId = await window.ethereum.request({ method: 'eth_chainId' })
+                                            console.log('🌐 Current chain ID:', chainId)
+                                            
+                                            // Sepolia chain ID is 0xaa36a7 (11155111 in decimal)
+                                            if (chainId !== '0xaa36a7') {
+                                              console.log('🔄 Switching to Sepolia network...')
+                                              toast({ title: 'Network switch', description: 'Switching to Sepolia testnet...', variant: 'default' })
+                                              
+                                              try {
+                                                await window.ethereum.request({
+                                                  method: 'wallet_switchEthereumChain',
+                                                  params: [{ chainId: '0xaa36a7' }],
+                                                })
+                                              } catch (switchError: any) {
+                                                // This error code indicates that the chain has not been added to MetaMask.
+                                                if (switchError.code === 4902) {
+                                                  console.log('➕ Adding Sepolia network to MetaMask...')
+                                                  await window.ethereum.request({
+                                                    method: 'wallet_addEthereumChain',
+                                                    params: [{
+                                                      chainId: '0xaa36a7',
+                                                      chainName: 'Sepolia Test Network',
+                                                      rpcUrls: ['https://ethereum-sepolia-rpc.publicnode.com'],
+                                                      nativeCurrency: {
+                                                        name: 'ETH',
+                                                        symbol: 'ETH',
+                                                        decimals: 18,
+                                                      },
+                                                      blockExplorerUrls: ['https://sepolia.etherscan.io'],
+                                                    }],
+                                                  })
+                                                } else {
+                                                  throw switchError
+                                                }
+                                              }
+                                            }
+                                          } catch (networkError) {
+                                            console.error('❌ Network setup failed:', networkError)
+                                            toast({ title: 'Network Error', description: 'Please manually switch to Sepolia testnet in MetaMask', variant: 'destructive' })
+                                            setListingBusy(false)
+                                            return
+                                          }
+                                        }
+                                        
                                         // @ts-ignore
                                         const provider = new ethers.BrowserProvider(window.ethereum)
                                         const signer = await provider.getSigner()
+                                        console.log('🔗 Provider and signer created')
+                                        
                                         const erc721 = new ethers.Contract(MYNFT_CONTRACT_ADDRESS, (ERC721Abi as any).abi, signer)
                                         const approved = await erc721.isApprovedForAll(address, MARKETPLACE_CONTRACT_ADDRESS)
+                                        console.log('🎫 Approval status:', approved)
+                                        
                                         if (!approved) {
+                                          console.log('📝 Setting approval...')
+                                          toast({ title: 'Approval needed', description: 'Approving marketplace to transfer your NFT...', variant: 'default' })
                                           const txA = await erc721.setApprovalForAll(MARKETPLACE_CONTRACT_ADDRESS, true)
                                           await txA.wait()
+                                          console.log('✅ Approval set')
                                         }
+                                        
                                         const marketplace = new ethers.Contract(MARKETPLACE_CONTRACT_ADDRESS, (MarketplaceAbi as any).abi, signer)
                                         const priceWei = ethers.parseEther(String(listingPriceEth || '0'))
-                                        const tx = await marketplace.list(MYNFT_CONTRACT_ADDRESS, ticket.token_id, priceWei)
-                                        const receipt = await tx.wait()
-                                        // Record listing in DB
-                                        const res = await fetch('/api/marketplace/list', {
-                                          method: 'POST',
-                                          headers: { 'Content-Type': 'application/json' },
-                                          body: JSON.stringify({
-                                            event_id: ticket.event_id,
-                                            ticket_id: ticket.id,
-                                            nft_address: MYNFT_CONTRACT_ADDRESS,
-                                            token_id: ticket.token_id,
-                                            seller_id: dbUser.id,
-                                            price_eth: Number(listingPriceEth),
-                                            tx_hash: receipt?.hash
-                                          })
+                                        console.log('🏪 Calling marketplace.list with:', { 
+                                          nft: MYNFT_CONTRACT_ADDRESS, 
+                                          tokenId: ticket.token_id, 
+                                          priceWei: priceWei.toString() 
                                         })
-                                        const data = await res.json()
-                                        if (!data.success) {
-                                          toast({ title: 'Listed on-chain', description: 'DB record failed, but your listing is live.', variant: 'default' })
+                                        
+                                        toast({ title: 'Listing on marketplace', description: 'Creating listing on blockchain...', variant: 'default' })
+                                        const tx = await marketplace.list(MYNFT_CONTRACT_ADDRESS, ticket.token_id, priceWei)
+                                        console.log('📋 Transaction sent:', tx.hash)
+                                        
+                                        toast({ title: 'Transaction sent', description: `Waiting for confirmation: ${tx.hash.slice(0, 10)}...`, variant: 'default' })
+                                        const receipt = await tx.wait()
+                                        console.log('✅ Transaction confirmed:', receipt.hash)
+                                        
+                                        // Record listing in DB (skip if no dbUser)
+                                        console.log('💾 Recording in database...')
+                                        if (dbUser) {
+                                          const res = await fetch('/api/marketplace/list', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({
+                                              event_id: ticket.event_id,
+                                              ticket_id: ticket.id,
+                                              nft_address: MYNFT_CONTRACT_ADDRESS,
+                                              token_id: ticket.token_id,
+                                              seller_id: dbUser.id,
+                                              price_eth: Number(listingPriceEth),
+                                              tx_hash: receipt?.hash
+                                            })
+                                          })
+                                          const data = await res.json()
+                                          console.log('📊 Database response:', data)
+                                          
+                                          if (!data.success) {
+                                            toast({ title: 'Listed on-chain', description: 'DB record failed, but your listing is live.', variant: 'default' })
+                                          } else {
+                                            toast({ title: 'Listed successfully!', description: `Ticket #${ticket.token_id} listed at ${priceNum} ETH.` })
+                                          }
                                         } else {
-                                          toast({ title: 'Listed', description: `Ticket #${ticket.token_id} listed at ${priceNum} ETH.` })
+                                          console.log('⚠️ Skipping database recording - no dbUser')
+                                          toast({ title: 'Listed on-chain only', description: 'Your NFT is listed on the blockchain but not in our database.', variant: 'default' })
                                         }
                                         setListingTicket(null)
                                         setListingBusy(false)
+                                        console.log('🎉 Listing completed successfully!')
+                                        
                                       } catch (e: any) {
-                                        console.error('List failed', e)
+                                        console.error('❌ Listing failed:', e)
+                                        console.error('Full error object:', JSON.stringify(e, Object.getOwnPropertyNames(e), 2))
                                         toast({ title: 'Listing failed', description: e?.message || 'Transaction error', variant: 'destructive' })
                                         setListingBusy(false)
                                       }

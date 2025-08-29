@@ -7,8 +7,6 @@ import TopRightBar from "@/components/top-right-bar"
 import { WalletProvider } from "@/context/wallet-context"
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/theme-provider"
-import dynamic from "next/dynamic"
-import ChatbotClientWrapper from "@/components/ChatbotClientWrapper"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -36,7 +34,6 @@ export default function RootLayout({
             <Toaster />
           </WalletProvider>
         </ThemeProvider>
-        <ChatbotClientWrapper />
       </body>
     </html>
   )

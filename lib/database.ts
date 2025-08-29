@@ -125,12 +125,12 @@ export class DatabaseService {
       return null
     }
 
+    // Some deployments may not have last_purchase_price_eth yet; avoid inserting unknown column
+    const { last_purchase_price_eth, ...rest } = ticketData as any
+    const insertTicket = { ...rest }
     const { data, error } = await supabaseAdmin
       .from('tickets')
-      .insert([{
-        ...ticketData,
-        last_purchase_price_eth: ticketData.last_purchase_price_eth ?? ticketData.purchase_price_eth
-      }])
+      .insert([insertTicket])
       .select(`
         *,
         event:events(*)

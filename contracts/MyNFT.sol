@@ -49,7 +49,7 @@ contract MyNFT is ERC721URIStorage, ERC2981, Ownable {
     // Override transfer logic to require marketplace (or owner) for transfers
     function _update(address to, uint256 tokenId, address auth)
         internal
-        override(ERC721, ERC721URIStorage)
+        override(ERC721)
         returns (address from)
     {
         bool isMint = _ownerOf(tokenId) == address(0);

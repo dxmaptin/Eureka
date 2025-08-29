@@ -34,8 +34,8 @@ const WalletContext = createContext<WalletContextType | undefined>(undefined)
 
 export function WalletProvider({ children }: { children: ReactNode }) {
   const [isConnected, setIsConnected] = useState(false)
-  const [address, setAddress] = useState("0x742d35Cc6634C0532925a3b844Bc454e4438f44e")
-  const [balance, setBalance] = useState("1.245")
+  const [address, setAddress] = useState("")
+  const [balance, setBalance] = useState("")
   const [walletType, setWalletType] = useState<'metamask' | 'magic' | null>(null)
   const [user, setUser] = useState<MagicUser | null>(null)
   const [dbUser, setDbUser] = useState<User | null>(null)
@@ -50,7 +50,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     phone?: string
     loginMethod: 'magic_email' | 'magic_phone' | 'magic_social' | 'metamask'
   }) => {
-    console.log('🔄 Syncing user with database:', walletAddress)
+    console.log('🔄 Syncing user with database:', walletAddress, userData)
     
     try {
       const dbUserData = await DatabaseService.createOrUpdateUser({
@@ -60,12 +60,32 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         login_method: userData.loginMethod
       })
       
+      console.log('📊 Database response:', dbUserData)
+      
       if (dbUserData) {
         setDbUser(dbUserData)
         console.log('✅ User synced with database:', dbUserData.id)
+        toast({
+          title: "Account synced",
+          description: "Your wallet is now connected to your account",
+          variant: "default"
+        })
+      } else {
+        console.log('❌ No user data returned from database')
+        toast({
+          title: "Database sync failed",
+          description: "Could not sync with user database",
+          variant: "destructive"
+        })
       }
     } catch (error) {
       console.error('❌ Error syncing user with database:', error)
+      console.error('Full error:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+      toast({
+        title: "Database error",
+        description: `Sync failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        variant: "destructive"
+      })
     }
   }
 
@@ -96,7 +116,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
             // Get balance
             if (userAddress) {
               try {
-                const provider = new ethers.JsonRpcProvider('https://sepolia.infura.io/v3/your-project-id')
+                const provider = new ethers.JsonRpcProvider('https://ethereum-sepolia-rpc.publicnode.com')
                 const balance = await provider.getBalance(userAddress)
                 setBalance(ethers.formatEther(balance))
               } catch (error) {
@@ -104,6 +124,13 @@ export function WalletProvider({ children }: { children: ReactNode }) {
                 setBalance('0.0')
               }
             }
+
+            // Sync DB user now that we have Magic identity
+            await syncUserWithDatabase(userAddress, {
+              email: metadata.email || undefined,
+              phone: (metadata as any).phoneNumber || undefined,
+              loginMethod: metadata.email ? 'magic_email' : ((metadata as any).phoneNumber ? 'magic_phone' : 'magic_social')
+            })
 
             // Show success message for OAuth redirects
             if (!metadata.email && !metadata.phoneNumber) {
@@ -248,7 +275,13 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       setIsConnected(true)
       setWalletType('magic')
       setLoginMethod('phone')
-      
+
+      // Sync with database
+      await syncUserWithDatabase(userAddress, {
+        phone: metadata.phoneNumber || phone,
+        loginMethod: 'magic_phone'
+      })
+
       // Get balance
       if (userAddress) {
         try {
